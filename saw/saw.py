@@ -26,6 +26,8 @@ class Saw_Base:
 
         items = self.parse(text)
         for item in items:
+            if item == '':
+                continue
             if self.child_class:
                 item = self.child_class.load( Saw_Items(), item)
             saw.__dict__[ self._type ].append(item)
