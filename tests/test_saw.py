@@ -18,7 +18,7 @@ class Test_Saw(unittest.TestCase):
         self.obj = Saw().load(text)
 
     def test_paragraphs(self):
-        second_p = ">Seriously, you won't get anything meaningful out of this, people will vote \
+        second_p = "Seriously, you won't get anything meaningful out of this, people will vote \
             for the language they like and then bash the usual suspects (PHP, actionscript,\
             C++,...)"
         obj = self.obj
@@ -50,14 +50,17 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(len(obj.paragraphs[1:].sentences), 5)
         # str
         self.assertEqual(str(obj.sentences[4]), four_c)
+        self.assertEqual(obj.sentences[4].full, four_c + '?')
         self.assertEqual(str(obj.paragraphs[2]).sentences[0], four_c)
         self.assertEqual(str(obj.paragraphs[-2:].sentences), str(obj.sentences[2:]))
         # after/before
+        self.assertEqual(obj.sentences[3].before, '')
+        self.assertEqual(obj.sentences[4].after, '?')
         # slices
         s = ''
         for sen in obj.sentences:
             s += sen[0]
-        self.assertEqual(s, 'SW>WOOJ')
+        self.assertEqual(s, 'SWSWOOJ')
 
     def test_blocks(self):
         third_from_end_b = 'Just as some people'
@@ -73,9 +76,12 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(len(obj.paragraphs[1:].sentences[2:].blocks), 7)
         # str
         self.assertEqual(str(obj.blocks[-3]), third_from_end_b)
+        self.assertEqual(obj.blocks[-2].full, 'dislike')
         self.assertEqual(str(obj.paragraphs[2].blocks[5]), third_from_end_b)
         self.assertEqual(str(obj.blocks[-3:-1]), third_from_end_b + " 'dislike'")
         # after/before
+        self.assertEqual(obj.blocks[4].before, '(')
+        self.assertEqual(obj.blocks[4].after, ',')
         # slices
         s = ''
         for sen in obj.sentences:
