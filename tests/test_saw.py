@@ -1,5 +1,5 @@
 import unittest
-from saw.saw import Saw
+from saw import Saw
 
 class Test_Saw(unittest.TestCase):
 
