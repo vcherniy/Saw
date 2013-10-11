@@ -14,3 +14,12 @@ class Base:
                 item = self.child_class.load( Items(), item)
             saw.__dict__[ self._type ].append(item)
         return saw
+
+from paragraphs import Paragraphs
+
+class Parse:
+    @staticmethod
+    def load(text):
+        saw = Items()
+        Paragraphs.load(saw, text)
+        return saw

@@ -1,6 +1,6 @@
-from base import Base
+import base
 
-class Words(Base):
+class Words(base.Base):
     _type = 'words'
     child_class = None
 

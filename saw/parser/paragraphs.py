@@ -1,7 +1,7 @@
-from base import Base
+import base
 from sentences import Sentences
 
-class Paragraphs(Base):
+class Paragraphs(base.Base):
     _type = 'paragraphs'
     child_class = Sentences
 

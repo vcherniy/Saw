@@ -14,4 +14,4 @@ from parser import Parse
 
 class Saw():
     def load(self, text):
-        return Parse().load(text)
+        return Parse.load(text)

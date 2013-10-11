@@ -1,7 +1,7 @@
-from base import Base
+import base
 from words import Words
 
-class Blocks(Base):
+class Blocks(base.Base):
     _type = 'blocks'
     child_class = Words
 
