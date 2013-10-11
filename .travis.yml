@@ -3,14 +3,11 @@ repo_token: Al6rGCTqjmwTEKPLgfHQAV3ij8BxpAMxa
 
 language: python
 python:
-  - "2.5"
-  - "2.6"
   - "2.7"
   - "3.2"
-  - "3.3"
 # command to install dependencies
-install:
-  - "pip install . --use-mirrors"
-  - "pip install -r requirements.txt --use-mirrors"
+#install:
+  #- "pip install . --use-mirrors"
+  #- "pip install -r requirements.txt --use-mirrors"
 # command to run tests
 script: nosetests
