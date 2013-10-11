@@ -1,4 +1,6 @@
-class Words(Saw_Base):
+from base import Base
+
+class Words(Base):
     _type = 'words'
     child_class = None
 

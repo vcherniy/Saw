@@ -1,7 +1,8 @@
 from .paragraphs import Paragraphs
+from ..saw import Items
 
 class Parse:
-    def __init__(self):
-        saw = Saw_Items()
+    def load(self, text):
+        saw = Items()
         Paragraphs.load(saw, text)
         return saw

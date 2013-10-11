@@ -1,6 +1,9 @@
-class Sentences(Saw_Base):
+from base import Base
+from blocks import Blocks
+
+class Sentences(Base):
     _type = 'sentences'
-    child_class = Saw_Blocks
+    child_class = Blocks
 
     @staticmethod
     def parse(text):
