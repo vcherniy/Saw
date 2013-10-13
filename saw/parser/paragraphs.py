@@ -7,4 +7,16 @@ class Paragraphs(base.Base):
 
     @staticmethod
     def parse(text):
-        return [text]
+        items = text.split("\n")
+        result, tmp = [], []
+        for item in items:
+            if item != '':
+                if tmp:
+                    result.append(tmp)
+                    tmp = []
+                result.append(item.strip())
+            tmp.append("\n")
+        tmp.pop()
+        if tmp:
+            result.append(tmp)
+        return result
