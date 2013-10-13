@@ -11,18 +11,19 @@ class Sentences(base.Base):
         #re.split('\!|\?|\. | \.',text)
         result = []
         prev = 0
-        tmp = []
 
-        for m in re.finditer('\!|\?| \.|\.(?:\s+|$)', text):
-            curr = m.start()
+        # we allow .09 as not end of sentences
+        # commented: | \.
+        for m in re.finditer('[\!\?]+|\.+(?:\s+|$)', text):
+            curr, _next = m.start(), m.end()
+            # if prev position of delimiter < current - between exists text
+            # at least 1 symbol.
             if prev < curr:
-                if tmp:
-                    result.append(tmp)
-                    tmp = []
-                result.append(text[prev:curr].strip())
-            tmp.append(text[curr])
-            prev = curr + 1
-        result.append(tmp)
+                node = text[prev:curr].strip()
+                if node != '':
+                    result.append(node)
+            result.append(list( text[curr:_next].strip() ))
+            prev = _next
         if len(text) > prev:
             result.append(text[prev:].strip())
         return result
