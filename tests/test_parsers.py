@@ -11,7 +11,7 @@ class Test_Saw(unittest.TestCase):
         pass
 
     def test_blocks(self):
-        single_rules = [',', ':', '=', '+', ';', '*'\
+        single_rules = [',', ':', '=', '+', ';', '*',\
             '{', '(', '[', ']', ')', '}', '"'\
             , ' -', '- ',  " '", "' "]
 
@@ -23,7 +23,7 @@ class Test_Saw(unittest.TestCase):
             space after, space before, space around, another symbols
             few spaces - to one space
             """
-            text = "This example{0}   with {0} anoher. comb!  of {0}spaces".format(rule)
+            text = "This example{0}   with {0} another. comb!  of {0}spaces".format(rule)
             expect = ['This example', [srule], 'with', [srule], 'another. comb!  of', [srule], 'spaces']
             self.assertEqual(Blocks.parse(text), expect)
 
@@ -32,7 +32,7 @@ class Test_Saw(unittest.TestCase):
             dublicated symbols, another symbol beetwen dublicated (or from this range)
             symbol in end of string - not empty value
             """
-            text = "{0} This example{0}{0}   with. {0},{0} anoher {0}.{0} spaces{0}".format(rule)
+            text = "{0} This example{0}{0}   with. {0},{0} another {0}.{0} spaces{0}".format(rule)
             expect = [[srule], 'This example', [srule, srule], 'with.', [srule, ',', srule], 'another',  [srule], '.', [srule], 'spaces', [srule]]
             self.assertEqual(Blocks.parse(text), expect)
 
@@ -42,8 +42,8 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(Words.parse(text), expect)
 
     def test_sentences(self):
-        text = '1 sentence! But what!!WTF ? That 12.45 points. Lenght = 100m..'
-        expect = ['1 sentence', ['!'], 'But what', ['!', '!'], 'WTF', ['?'], 'That 12.45 points', ['.'], 'Lenght = 100m.', ['.']]
+        text = '?1 sentence! But what!!WTF ? That 12.45 points. Lenght = 100m..'
+        expect = [['?'], '1 sentence', ['!'], 'But what', ['!', '!'], 'WTF', ['?'], 'That 12.45 points', ['.'], 'Lenght = 100m.', ['.']]
 
         self.assertEqual(Sentences.parse(text), expect)
 
