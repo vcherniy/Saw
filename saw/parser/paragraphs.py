@@ -16,6 +16,7 @@ class Paragraphs(base.Base):
                     tmp = []
                 result.append(item.strip())
             tmp.append("\n")
+        # end of string will add \n. We should ignore it.
         tmp.pop()
         if tmp:
             result.append(tmp)
