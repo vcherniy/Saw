@@ -6,4 +6,4 @@ class Words(base.Base):
 
     @staticmethod
     def parse(text):
-        return text.split(' ')
+    	return [x.strip() for x in text.split(' ') if x != '']
