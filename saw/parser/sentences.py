@@ -14,7 +14,8 @@ class Sentences(base.Base):
 
         # we allow .09 as not end of sentences
         # commented: | \.
-        for m in re.finditer('[\!\?]+|\.+(?:\s+|$)', text):
+        #for m in re.finditer('[\!\?]+|\.+(?:\s+|$|\?|\!)', text):
+        for m in re.finditer('\.+(?:\s+|$)|(\.*)[\!\?]+(\.+(?:\s+|$))*', text):
             curr, _next = m.start(), m.end()
             # if prev position of delimiter < current - between exists text
             # at least 1 symbol.

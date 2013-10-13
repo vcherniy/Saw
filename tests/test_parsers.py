@@ -36,15 +36,16 @@ class Test_Saw(unittest.TestCase):
             dublicated symbols, another symbol beetwen dublicated (or from this range)
             symbol in end of string - not empty value
             """
-            text = "{0} This example{0}{0}   with. {0},{0} another {0}.{0} spaces{0}".format(rule)
+            text = "{0}This example{0}{0}   with. {0},{0} another {0}.{0} spaces{0}".format(rule)
             if rule in ['- ', "' "]:
-                expect = [[srule], 'This example', [srule], [srule], 'with.', [srule], [','], [srule], 'another', [srule], '.', [srule], 'spaces', [srule]]
+                expect = [[srule], 'This example', [srule], [srule], 'with.', [srule], [',', srule], 'another', [srule], '.', [srule], 'spaces', [srule]]
                 self.assertEqual(Blocks.parse(text), expect)
             elif rule in [' -', " '"]:
-                #expect = [[srule], 'This example', [srule], [srule], 'with. ' + rule + ',', [srule], 'another ' + rule + '.', [srule], 'spaces', [srule]]    
+                expect = [rule + 'This example', [srule], [srule], 'with.', [srule, ','], [srule], 'another ' + rule + '.', [srule], 'spaces', [srule]]    
                 pass
             elif rule in ['-', "'"]:
-                pass
+                expect = [rule + 'This example', [srule, srule], 'with.', [srule, ',', srule], 'another ' + rule + '.', [srule], 'spaces', [srule]]
+                self.assertEqual(Blocks.parse(text), expect)
             else:
                 expect = [[srule], 'This example', [srule, srule], 'with.', [srule, ',', srule], 'another',  [srule], '.', [srule], 'spaces', [srule]]
                 self.assertEqual(Blocks.parse(text), expect)
@@ -60,8 +61,8 @@ class Test_Saw(unittest.TestCase):
         expect = [['?'], '1 sentence', ['!'], 'But what', ['!', '!'], 'WTF', ['?'], '.That 12.45 points', ['.'], ['.'], 'Lenght = 100m', ['.', '.']]
         self.assertEqual(Sentences.parse(text), expect)
 
-        text = "Test! ! and. ending text"
-        expect = ['Test', ['!'], ['!'], 'and', ['.'], 'ending text']
+        text = "Test! ! ft.?. and. ending text"
+        expect = ['Test', ['!'], ['!'], 'ft', ['.', '?', '.'], 'and', ['.'], 'ending text']
         self.assertEqual(Sentences.parse(text), expect)
 
     def test_paragraphs(self):

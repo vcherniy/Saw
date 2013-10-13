@@ -14,7 +14,7 @@ class Blocks(base.Base):
         # we allow "-cast" and "'case" as not end of block
         # commented: | \-| \'
         #for m in re.finditer('[\!\?]+|\.+(?:\s+|$)', text):
-        for m in re.finditer('[\,\:\=\+\;\*\{\(\[\]\)\}\"]+|[\-\']+(?:\s+|$)', text):
+        for m in re.finditer('[\-\']+(?:\s+|$)|[\-\']*[\,\:\=\+\;\*\{\(\[\]\)\}\"]+([\-\']+(?:\s+|$))*', text):
             curr, _next = m.start(), m.end()
             # if prev position of delimiter < current - between exists text
             # at least 1 symbol.
