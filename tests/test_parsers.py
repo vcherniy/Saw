@@ -2,6 +2,7 @@ import unittest
 
 from saw.parser.blocks import Blocks
 from saw.parser.words import Words
+from saw.parser.sentences import Sentences
 
 class Test_Saw(unittest.TestCase):
 
@@ -34,10 +35,14 @@ class Test_Saw(unittest.TestCase):
             self.assertEqual(Blocks.parse(text), expect)
 
     def test_words(self):
-        text = "Test with  many   spaces. and: -,end  "
-        expect = ['test', 'with', 'many', 'spaces.', 'and:', '-,end']
+        text = "Test with  many  . spaces. and: -,end  "
+        expect = ['Test', 'with', 'many', '.', 'spaces.', 'and:', '-,end']
         self.assertEqual(Words.parse(text), expect)
 
+    def test_sentences(self):
+        text = '1 sentence! But what!!WTF ? That 12.45 points. '
+        expect = ['1 sentence', ['!'], 'But what', ['!', '!'], 'WTF', ['?'], 'That 12.45 points', ['.']]
+        self.assertEqual(Sentences.parse(text), expect)
 
 
 if __name__ == "__main__":
