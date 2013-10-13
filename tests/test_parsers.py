@@ -42,8 +42,9 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(Words.parse(text), expect)
 
     def test_sentences(self):
-        text = '1 sentence! But what!!WTF ? That 12.45 points. '
-        expect = ['1 sentence', ['!'], 'But what', ['!', '!'], 'WTF', ['?'], 'That 12.45 points', ['.']]
+        text = '1 sentence! But what!!WTF ? That 12.45 points. Lenght = 100m..'
+        expect = ['1 sentence', ['!'], 'But what', ['!', '!'], 'WTF', ['?'], 'That 12.45 points', ['.'], 'Lenght = 100m.', ['.']]
+
         self.assertEqual(Sentences.parse(text), expect)
 
     def test_paragraphs(self):
