@@ -8,15 +8,19 @@ class Test_Saw(unittest.TestCase):
         pass
 
     def test_blocks(self):
-        single_rules = [',', ':', '=', '+', ';', '*']
+        single_rules = [',', ':', '=', '+', ';', '*', ' -', '- '\
+            '{', '(', '[', ']', ')', '}', '"', "'"]
+
         for rule in single_rules:
+            # striped rule
+            srule = rule.strip()
             """
             Test with:
             space after, space before, space around, another symbols
             few spaces - to one space
             """
             text = "This example%s  with %s anoher. comb!  of %sspaces" % [rule] * 3
-            expect = ['This example', [rule], 'with', [rule], 'another. comb!  of', [rule], 'spaces']
+            expect = ['This example', [srule], 'with', [srule], 'another. comb!  of', [srule], 'spaces']
             self.assertEqual(Blocks.parse(text), expect)
 
             """
@@ -24,35 +28,9 @@ class Test_Saw(unittest.TestCase):
             dublicated symbols, another symbol beetwen dublicated (or from this range)
             symbol in end of string - not empty value
             """
-            d_rule = [rule, rule]
-            d_with_mixin = [rule, ',', rule]
-            text = "This example%s%s with %s,%s anoher %s.%s spaces%s" % [rule] * 7
-            expect = ['This example', d_rule, 'with', d_with_mixin, 'another',  [rule], '.', [rule], 'spaces', [rule]]
+            text = "This example%s%s with. %s,%s anoher %s.%s spaces%s" % [rule] * 7
+            expect = ['This example', [srule, srule], 'with.', [srule, ',', srule], 'another',  [srule], '.', [srule], 'spaces', [srule]]
             self.assertEqual(Blocks.parse(text), expect)
-
-            #@TODO: "-"
-
-        double_rule_begin = ['{', '(', '[', '"', "'"]
-        double_rule_end   = ['}', ')', ']', '"', "'"]
-        
-        double_rules = zip(double_rule_begin, double_rule_end)
-
-        for rule in double_rules:
-            
-
-
-
-        res = Blocks.parse('Nine - number')
-        self.assertEqual(res, ['Nine', ('-'), 'number'])
-
-        res = Blocks.parse('Cat (or dog) name')
-        self.assertEqual(res, ['cat', ('('), 'or dog', (')'), 'name')
-
-        res = Blocks.parse('Cat (or dog (or poni)) name')
-        self.assertEqual(res, ['cat', ('('), 'or dog', ('('), 'or poni', (')', ')'), 'name')
-
-        res = Blocks.parse('The Car "Micro" fired')
-        self.assertEqual(res, ['The Car', ('"'), 'Micro', ('"'), 'fired'])
 
 if __name__ == "__main__":
     unittest.main()
