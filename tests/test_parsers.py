@@ -39,16 +39,27 @@ class Test_Saw(unittest.TestCase):
             text = "{0}This example{0}{0}   with. {0},{0} another {0}.{0} spaces{0}".format(rule)
             if rule in ['- ', "' "]:
                 expect = [[srule], 'This example', [srule], [srule], 'with.', [srule], [',', srule], 'another', [srule], '.', [srule], 'spaces', [srule]]
-                self.assertEqual(Blocks.parse(text), expect)
             elif rule in [' -', " '"]:
-                expect = [rule + 'This example', [srule], [srule], 'with.', [srule, ','], [srule], 'another ' + rule + '.', [srule], 'spaces', [srule]]    
-                pass
+                expect = [srule + 'This example', [srule], [srule], 'with.', [srule, ','], [srule], 'another ' + rule + '.', [srule], 'spaces', [srule]]    
             elif rule in ['-', "'"]:
                 expect = [rule + 'This example', [srule, srule], 'with.', [srule, ',', srule], 'another ' + rule + '.', [srule], 'spaces', [srule]]
-                self.assertEqual(Blocks.parse(text), expect)
             else:
                 expect = [[srule], 'This example', [srule, srule], 'with.', [srule, ',', srule], 'another',  [srule], '.', [srule], 'spaces', [srule]]
-                self.assertEqual(Blocks.parse(text), expect)
+            self.assertEqual(Blocks.parse(text), expect)
+
+            """Test with:
+            inject nodes to strings
+            """
+            text = "Text {0}no{0}br to t{0}{0}mobile".format(rule)
+            if rule in ['- ', "' "]:
+                expect = ['Text', [srule], 'no', [srule], 'br to t', [srule], [srule], 'mobile']
+            elif rule in [' -', " '"]:
+                expect = ['Text ' + rule + 'no' + rule + 'br to t', [srule], srule + 'mobile']
+            elif rule in ['-', "'"]:
+                expect = ['Text ' + rule + 'no' + rule + 'br to t' + rule + rule + 'mobile']
+            else:
+                expect = ['Text', [srule], 'no', [srule], 'br to t', [srule, srule], 'mobile']
+            self.assertEqual(Blocks.parse(text), expect)
             
 
     def test_words(self):
