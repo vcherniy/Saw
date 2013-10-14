@@ -50,15 +50,15 @@ class Test_Saw(unittest.TestCase):
             """Test with:
             inject nodes to strings
             """
-            text = "Text {0}no{0}br to t{0}{0}mobile".format(rule)
+            text = "Text {0}{0}no{0}br to t{0}{0}mobile".format(rule)
             if rule in ['- ', "' "]:
-                expect = ['Text', [srule], 'no', [srule], 'br to t', [srule], [srule], 'mobile']
+                expect = ['Text', [srule], [srule], 'no', [srule], 'br to t', [srule], [srule], 'mobile']
             elif rule in [' -', " '"]:
-                expect = ['Text ' + rule + 'no' + rule + 'br to t', [srule], srule + 'mobile']
+                expect = ['Text', [srule], srule + 'no' + rule + 'br to t', [srule], srule + 'mobile']
             elif rule in ['-', "'"]:
-                expect = ['Text ' + rule + 'no' + rule + 'br to t' + rule + rule + 'mobile']
+                expect = ['Text ' + rule + rule + 'no' + rule + 'br to t' + rule + rule + 'mobile']
             else:
-                expect = ['Text', [srule], 'no', [srule], 'br to t', [srule, srule], 'mobile']
+                expect = ['Text', [srule, srule], 'no', [srule], 'br to t', [srule, srule], 'mobile']
             self.assertEqual(Blocks.parse(text), expect)
             
 
@@ -72,8 +72,8 @@ class Test_Saw(unittest.TestCase):
         expect = [['?'], '1 sentence', ['!'], 'But what', ['!', '!'], 'WTF', ['?'], '.That 12.45 points', ['.'], ['.'], 'Lenght = 100m', ['.', '.']]
         self.assertEqual(Sentences.parse(text), expect)
 
-        text = "Test! ! ft.?. and. ending text"
-        expect = ['Test', ['!'], ['!'], 'ft', ['.', '?', '.'], 'and', ['.'], 'ending text']
+        text = "Test! ! ft.?. a..b ..before and. ending text"
+        expect = ['Test', ['!'], ['!'], 'ft', ['.', '?', '.'], 'a..b ..before and', ['.'], 'ending text']
         self.assertEqual(Sentences.parse(text), expect)
 
     def test_paragraphs(self):
