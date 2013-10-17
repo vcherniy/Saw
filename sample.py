@@ -25,12 +25,30 @@ for stnc in st:
 
 import datetime
 
+with open('test.txt', 'r') as content_file:
+    text = content_file.read()
+
 st = datetime.datetime.now()
 
-tr = text * 100000
-Sentences.parse(tr)
-#saw = Saw().load(tr)
+tr = text * 1
+#Sentences.parse(tr)
+saw = Saw().load(tr)
 et = datetime.datetime.now()
+print saw
 
 print str(et - st)
+
+t1 = ''
+for p in saw:
+	for s in p:
+		if isinstance(s, list):
+			for b in s:
+				if isinstance(b, list):
+					t1 = t1 + ' '.join(b)
+				else:
+					t1 = t1 + b + ' '
+		else:
+			t1 = t1 + s
+
+print t1
 
