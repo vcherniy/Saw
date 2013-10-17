@@ -33,5 +33,7 @@ class Sentences(base.Base):
                 result.append( items )
                 prev = _next
         if _len > prev:
-            result.append(text[prev:].strip())
+            node = text[prev:].strip()
+            if node:
+                result.append(node)
         return result
