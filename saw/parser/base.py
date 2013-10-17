@@ -8,6 +8,8 @@ class Base:
 
         items = self.parse(text)
         for item in items:
+            if isinstance(item, list):
+                continue
             if item == '':
                 continue
             if self.child_class:

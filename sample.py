@@ -28,7 +28,8 @@ import datetime
 st = datetime.datetime.now()
 
 tr = text * 100000
-Paragraphs.parse(tr)
+Sentences.parse(tr)
+#saw = Saw().load(tr)
 et = datetime.datetime.now()
 
 print str(et - st)
