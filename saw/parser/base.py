@@ -21,10 +21,11 @@ class Base:
             else:
                 print ident2 + self._type + ': << ' + item_text
                 item.text(item_text)
+                saw.children.append(item)
 
         if not (self._type in saw.__dict__):
-            saw.__dict__[ self._type ] = saw.__dict__['children']
-        print saw.children
+            saw.__dict__[ self._type ] = saw.children
+        #print saw.children
         return saw
 
 
