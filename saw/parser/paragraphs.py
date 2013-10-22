@@ -1,6 +1,7 @@
 import base
 from sentences import Sentences
 
+
 class Paragraphs(base.Base):
     _type = 'paragraphs'
     child_class = Sentences
@@ -21,7 +22,3 @@ class Paragraphs(base.Base):
         if tmp:
             result.append(tmp)
         return result
-
-    @staticmethod
-    def repr(obj):
-        return ''

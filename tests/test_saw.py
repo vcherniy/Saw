@@ -2,8 +2,6 @@ import unittest
 from saw import Saw
 
 class Test_Saw(unittest.TestCase):
-    pass
-"""
     def setUp(self):
         text = "Starting right this second, it's way easier to merge Pull Requests! \
             We usually merge them from the comfortable glow of our computers, but with the\
@@ -39,7 +37,7 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(res, ['St', '>S', 'Wh'])
 
     def test_sentences(self):
-        four_c = 'Why do you insist that is not meaningful'
+        four_c = 'Why do you insist that is not meaningful?'
         obj = self.obj
 
         # children
@@ -50,7 +48,7 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(len(obj.paragraphs[1].sentences), 1)
         self.assertEqual(len(obj.paragraphs[1:].sentences), 5)
         # str
-        self.assertEqual(str(obj.sentences[4]), four_c)
+        self.assertEqual(str(obj.sentences[3]), four_c)
         self.assertEqual(obj.sentences[4].full, four_c + '?')
         self.assertEqual(str(obj.paragraphs[2]).sentences[0], four_c)
         self.assertEqual(str(obj.paragraphs[-2:].sentences), str(obj.sentences[2:]))
@@ -72,7 +70,7 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(obj.sentences.blocks, obj.blocks)
         self.assertEqual(obj.paragraphs.blocks, obj.blocks)
         # count
-        self.assertEqual(len(obj.blocks), 21)
+        self.assertEqual(len(obj.blocks), 20)
         self.assertEqual(len(obj.paragraphs[2].blocks), len(obj.blocks[-8:]))
         self.assertEqual(len(obj.paragraphs[1:].sentences[2:].blocks), 7)
         # str
@@ -88,8 +86,6 @@ class Test_Saw(unittest.TestCase):
         for sen in obj.sentences:
             s += sen[0]
         self.assertEqual(s, 'SW>WOOJ')
-
-"""
 
 if __name__ == "__main__":
     unittest.main()

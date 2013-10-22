@@ -2,6 +2,7 @@ import base
 from words import Words
 import re
 
+
 class Blocks(base.Base):
     _type = 'blocks'
     child_class = Words
@@ -37,7 +38,3 @@ class Blocks(base.Base):
             if node:
                 result.append(node)
         return result
-
-    @staticmethod
-    def repr(obj):
-        return ''

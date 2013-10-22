@@ -2,6 +2,7 @@ import base
 from blocks import Blocks
 import re
 
+
 class Sentences(base.Base):
     _type = 'sentences'
     child_class = Blocks
@@ -37,7 +38,3 @@ class Sentences(base.Base):
             if node:
                 result.append(node)
         return result
-
-    @staticmethod
-    def repr(obj):
-        return ''
