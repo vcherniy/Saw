@@ -8,21 +8,18 @@ TC39 includes some of the finest minds in JavaScript (not least, Brendan Eich hi
 but as Jeremy Ashkenas famously cautioned \"JavaScript is too important to be left \
 to the experts\". They need our help."
 
-from saw.parser.sentences import Sentences
-from saw.parser.blocks import Blocks
-from saw.parser.words import Words
-from saw.parser.paragraphs import Paragraphs
-st = Sentences.parse(text)
-result = []
-for stnc in st:
-	if isinstance(stnc, list):
-		result.append(stnc)
-	else:
-		result.append(Blocks.parse(stnc))
+text = 'First sentence. Two, serios text?'
+
+saw = Saw().load(text)
+for p in saw.paragraphs:
+	for s in p.sequences:
+		for b in s.blocks:
+			for w in b.words:
+				print '-----'
 
 #print result
 
-
+"""
 import datetime
 
 with open('test.txt', 'r') as content_file:
@@ -52,3 +49,4 @@ for p in saw:
 
 print t1
 
+"""
