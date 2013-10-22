@@ -34,8 +34,7 @@ class Item:
         result = Items()
 
         if self.children:
-            for item in self.children:
-                result.extend( getattr(item, name, []) )
+            result = getattr(self.children, name, [])
         return result
 
 
@@ -52,15 +51,14 @@ class Items(list):
         return result
 
     def __getitem__(self, key):
-        res = super(Items, self).__getitem__(key)
+        result = super(Items, self).__getitem__(key)
         if isinstance(key, slice):
-            return Items(res)
-        else:
-            return res
+            result = Items(result)
+        return result
 
     def __getslice__(self, i, j):
-        res = super(Items, self).__getslice__(i, j)
-        return Items(res)
+        result = super(Items, self).__getslice__(i, j)
+        return Items(result)
 
         
 
