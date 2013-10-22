@@ -3,8 +3,10 @@ from ..saw import Items, Item
 class Base:
     @classmethod
     def load(self, saw, text, ident):
-        ident2 = ident + '  '
-        saw.__dict__['children'] = Items()
+        ident2 = ident + '.  '
+        if not('children' in saw.__dict__):
+            saw.__dict__['children'] = Items()
+        saw.live()
         items = self.parse(text)
 
         item = Item()
@@ -22,7 +24,16 @@ class Base:
                 print ident2 + self._type + ': << ' + item_text
                 item.text(item_text)
                 saw.children.append(item)
+                item = Item()
 
+        if item._live:
+            saw.children.append(item)
+
+        for a in saw.children:
+            print ident2 + '_has: ' + self._type
+
+
+        print str(saw.children)
         if not (self._type in saw.__dict__):
             saw.__dict__[ self._type ] = saw.children
         #print saw.children
