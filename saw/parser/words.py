@@ -7,3 +7,7 @@ class Words(base.Base):
     @staticmethod
     def parse(text):
         return [x.strip() for x in text.split(' ') if x != '']
+
+    @staticmethod
+    def repr(obj):
+        return ''

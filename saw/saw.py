@@ -2,8 +2,9 @@ class Item:
     # has attribute with direch children and name as children type
     # example: .words
 
-    def __init__(self):
+    def __init__(self, klass):
         self._live = False
+        self.__klass = klass.child_class
 
     def after(self, after_arr):
         self.live()
@@ -16,23 +17,24 @@ class Item:
     def live(self):
         self._live = True
 
+    def __repr__(self):
+        if self.__klass:
+            return self.__klass.repr(self)
+        elif '_text' in self.__dict__:
+            return self._text
+        else:
+            return ''
+
+
+
     # has attribute .children with link to above attribute.
 
-    def __repr__(self):
-        #return super(Items, self).__repr__()
-        return list.__repr__(self)
+
 
     # if we call instance with attribute what exists in instance then
     # python will take direct access to children.
     # else call this function
     def __getattr__(self, name, *args, **kwrds):
-        print 'GET ' + str(self.__dict__.keys()) + ':: ' + name
-
-        if name in list.__dict__:
-            def fn(*args, **kwrds):
-                return getattr(list, name)(*args, **kwrds)
-            return fn
-
         name = str(name)
         result = Items()
 

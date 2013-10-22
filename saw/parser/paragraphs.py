@@ -21,3 +21,7 @@ class Paragraphs(base.Base):
         if tmp:
             result.append(tmp)
         return result
+
+    @staticmethod
+    def repr(obj):
+        return ''

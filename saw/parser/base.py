@@ -9,14 +9,14 @@ class Base:
         saw.live()
         items = self.parse(text)
 
-        item = Item()
+        item = Item(self)
         for item_text in items:
             if isinstance(item_text, list):
                 print ident2 + self._type + ': ' + str(item_text) + ''
                 item.after(item_text)
                 
                 saw.children.append(item)
-                item = Item()
+                item = Item(self)
             elif self.child_class:
                 print ident2 + self._type + ': ' + self.child_class.__name__ + '.load( ' + item_text + ') '
                 item = self.child_class.load(item, item_text, ident2)
@@ -24,7 +24,7 @@ class Base:
                 print ident2 + self._type + ': << ' + item_text
                 item.text(item_text)
                 saw.children.append(item)
-                item = Item()
+                item = Item(self)
 
         if item._live:
             saw.children.append(item)
@@ -33,7 +33,7 @@ class Base:
             print ident2 + '_has: ' + self._type
 
 
-        print str(saw.children)
+        print ident2 + ' _____' + str(saw.children)
         if not (self._type in saw.__dict__):
             saw.__dict__[ self._type ] = saw.children
         #print saw.children
@@ -45,5 +45,5 @@ from paragraphs import Paragraphs
 class Parse:
     @staticmethod
     def load(text):
-        saw = Item()
+        saw = Item(Paragraphs)
         return Paragraphs.load(saw, text, '')

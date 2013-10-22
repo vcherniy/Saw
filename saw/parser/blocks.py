@@ -37,3 +37,7 @@ class Blocks(base.Base):
             if node:
                 result.append(node)
         return result
+
+    @staticmethod
+    def repr(obj):
+        return ''

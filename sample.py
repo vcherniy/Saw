@@ -12,10 +12,13 @@ text = 'First sentence. Two, serios text?'
 
 saw = Saw().load(text)
 for p in saw.paragraphs:
-	for s in p.sequences:
+	for s in p.sentences:
 		for b in s.blocks:
 			for w in b.words:
 				print '-----'
+
+for a in saw.words:
+	print '*-----'
 
 #print result
 
