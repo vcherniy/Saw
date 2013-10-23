@@ -4,21 +4,15 @@ class Item:
     # example: .words
 
     def __init__(self):
-        self._live = False
         self._after = []
         self._text = ''
         self.children = None
 
     def after(self, _after):
-        self.live()
         self._after = _after
 
     def text(self, text):
-        self.live()
         self._text = text
-
-    def live(self):
-        self._live = True
 
     def __repr__(self):
         return "%s%s%s" % (str(self.children or ''), self._text, ''.join(self._after))

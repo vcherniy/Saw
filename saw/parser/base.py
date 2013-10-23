@@ -3,16 +3,11 @@ from ..saw import Items, Item
 class Base:
     @classmethod
     def load(self, saw, text):
-        children = Items()
-        saw.live()
+        children, item = Items(), Item()
 
-        items = self.parse(text)
-
-        item = Item()
-        for item_text in items:
+        for item_text in self.parse(text):
             if isinstance(item_text, list):
                 item.after(item_text)
-                
                 children.append(item)
                 item = Item()
             elif self.child_class:
@@ -22,7 +17,9 @@ class Base:
                 children.append(item)
                 item = Item()
 
-        if item._live:
+        # When ._text or ._after were assigned, it items were
+        # added to children
+        if item.children:
             children.append(item)
 
         if children:
