@@ -15,10 +15,14 @@ class Item:
         self._text = text
 
     def __repr__(self):
-        return "%s%s%s" % (str(self.children or ''), self._text, ''.join(self._after))
+        result = self.__dict__
+        result.pop("children", None)
+        if not(self._after): result.pop('_after', None)
+        if not(self._text):  result.pop('_text', None)
+        return result.__repr__()
 
     def __str__(self):
-        return self.__repr__()
+        return "%s%s%s" % (str(self.children or ''), self._text, ''.join(self._after))
 
     # if we call instance with attribute what exists in instance then
     # python will take direct access to children.
@@ -33,7 +37,7 @@ class Item:
 
 
 class Items(list):
-    def __repr__(self):
+    def __str__(self):
         return ' '.join( (str(x) for x in self) )
 
     def __getattr__(self, name):
@@ -52,9 +56,7 @@ class Items(list):
 
     def __getslice__(self, i, j):
         result = super(Items, self).__getslice__(i, j)
-        return Items(result)
-
-        
+        return Items(result)        
 
 
 from parser import Parse
