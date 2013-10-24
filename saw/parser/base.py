@@ -8,20 +8,19 @@ class Base:
         for item_text in self.parse(text):
             if isinstance(item_text, list):
                 item.after(item_text)
-                children.append(item)
-                item = Item()
             elif self.child_class:
                 self.child_class.load(item, item_text)
+                continue
             else:
                 item.text(item_text)
-                children.append(item)
-                item = Item()
+
+            children.append(item)
+            item = Item()
 
         # When ._text or ._after were assigned, it items were
         # added to children
         if item.children:
             children.append(item)
-
         if children:
             saw.__dict__[ self._type ] = saw.children = children
 
