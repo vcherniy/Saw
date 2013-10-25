@@ -24,6 +24,13 @@ class Item:
     def __str__(self):
         return "%s%s%s" % (str(self.children or ''), self._text, ''.join(self._after))
 
+    @property
+    def pure(self):
+        item = Item()
+        item.__dict__ = self.__dict__.copy()
+        item.__dict__.pop('_after', None)
+        return item
+
     # if we call instance with attribute what exists in instance then
     # python will take direct access to children.
     # else call this function
@@ -34,6 +41,12 @@ class Item:
         if self.children:
             result = getattr(self.children, name, [])
         return result
+
+    def __getitem__(self, key):
+        return self.__str__().__getitem__(key)
+
+    def __getslice__(self, i, j):
+        return self.__str__().__getslice__(i, j)
 
 
 class Items(list):
@@ -47,6 +60,10 @@ class Items(list):
         for item in self:
             result.extend( getattr(item, name, []) )
         return result
+
+    @property
+    def pure(self):
+        return Items( x.pure for x in self )
 
     def __getitem__(self, key):
         result = super(Items, self).__getitem__(key)
