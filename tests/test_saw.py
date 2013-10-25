@@ -36,7 +36,8 @@ class Test_Saw(unittest.TestCase):
         res = []
         for item in obj.paragraphs:
             res.append( str(item)[:2] )
-        self.assertEqual(res, ['St', '>S', 'Wh'])
+            res.append( len(item[:]) )
+        self.assertEqual(res, ['St', 2, '>S', 1, 'Wh', 4])
 
         test = []
         expect = []
