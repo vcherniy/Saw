@@ -28,7 +28,7 @@ class Item:
     def pure(self):
         item = Item()
         item.__dict__ = self.__dict__.copy()
-        item.__dict__.pop('_after', None)
+        item.__dict__['_after'] = []
         return item
 
     # if we call instance with attribute what exists in instance then
@@ -43,11 +43,10 @@ class Item:
         return result
 
     def __getitem__(self, key):
-        return self.__str__().__getitem__(key)
+        return self.children.__getitem__(key)
 
     def __getslice__(self, i, j):
-        return self.__str__().__getslice__(i, j)
-
+        return self.children[i: j]
 
 class Items(list):
     def __str__(self):

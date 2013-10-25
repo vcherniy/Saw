@@ -35,8 +35,19 @@ class Test_Saw(unittest.TestCase):
         # slices
         res = []
         for item in obj.paragraphs:
-            res.append( item[:2] )
+            res.append( str(item)[:2] )
         self.assertEqual(res, ['St', '>S', 'Wh'])
+
+        test = []
+        expect = []
+        for item in obj.paragraphs:
+            test.append( item[:2] )
+            test.append( item[0] )
+            test.append( item[0::3] )
+            expect.append( item.children[:2] )
+            expect.append( item.sentences[0] )
+            expect.append( item.children[0::3] )
+        self.assertEqual(test, expect)
 """
     def test_sentences(self):
         four_c = 'Why do you insist that is not meaningful?'
