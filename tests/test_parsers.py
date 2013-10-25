@@ -1,9 +1,9 @@
 import unittest
 
-from saw.parser.blocks import Blocks
-from saw.parser.words import Words
-from saw.parser.sentences import Sentences
-from saw.parser.paragraphs import Paragraphs
+from saw.parsers.blocks import Blocks
+from saw.parsers.words import Words
+from saw.parsers.sentences import Sentences
+from saw.parsers.paragraphs import Paragraphs
 
 class Test_Saw(unittest.TestCase):
 

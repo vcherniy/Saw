@@ -53,6 +53,4 @@ print saw.blocks[12].words[:-2:2]
 
 if str(saw.blocks.words) == str(saw.words):
 	print 'FUCK ME'
-
-print str(et - st)
-print saw.__repr__()
+#print repr(saw)

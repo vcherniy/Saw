@@ -1,4 +1,5 @@
-from ..saw import Items, Item
+from saw.items import Items
+from saw.item import Item
 
 class Base:
     @classmethod
