@@ -2,7 +2,7 @@ class Pure:
     def item(self, item):
         new_item = item.__class__()
         new_item.__dict__ = item.__dict__.copy()
-        new_item.__dict__['_after'] = []
+        new_item.after([])
         return new_item
 
     def items(self, items):
