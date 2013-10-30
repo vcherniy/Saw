@@ -11,15 +11,15 @@ class Filter:
 
     @classmethod
     def _load_filters(self):
-        module_names = [name for name in __all__ if not(name == '__init__') ]
+        module_names = [ name.lower() for name in __all__ if name != '__init__' ]
         filters = __import__('saw.filters', globals(), locals(), module_names, -1)
 
-        for name in module_names:
-            module = getattr(filters, name)
+        for module_name in module_names:
+            _filter = getattr(filters, module_name)
 
-            for obj_name, obj in inspect.getmembers(module):
-                if (obj_name.lower() == name) and inspect.isclass(obj):
-                    self._filters[ name ] = obj
+            for obj_name, obj in inspect.getmembers(_filter):
+                if (obj_name.lower() == module_name) and inspect.isclass(obj):
+                    self._filters[ module_name ] = obj
                     break
 
     @classmethod
@@ -29,7 +29,7 @@ class Filter:
     @classmethod
     def apply(self, name, item):
         if not(self.exists(name)):
-            return False
+            return item
 
         filter_class = self._filters[ name ]()
         if isinstance(item, saw.items.Items):
