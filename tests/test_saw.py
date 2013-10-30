@@ -86,7 +86,7 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(test, expect)
 
     def test_blocks(self):
-        test = "Just as some people 'dislike'"
+        third_from_end_b = "Just as some people 'dislike'"
         obj = self.obj
 
         # children
