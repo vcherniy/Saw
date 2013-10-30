@@ -56,6 +56,13 @@ if str(saw.blocks.words) == str(saw.words):
 	print 'FUCK ME'
 
 
+print ' ---- each ---'
+kt = saw.sentences.each.blocks.words[:3].get()
+for s in kt:
+	print '** ' + str(s)
+print ' ------- '
+
+
 import sys
 
 st = datetime.datetime.now()
