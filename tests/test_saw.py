@@ -86,7 +86,7 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(test, expect)
 
     def test_blocks(self):
-        third_from_end_b = "Just as some people 'dislike'"
+        test = "Just as some people 'dislike'"
         obj = self.obj
 
         # children
@@ -122,7 +122,36 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(test, expect)
 
     def test_words(self):
-        pass
+        obj = Saw().load("Test this up.\nNew block - new problems. Yes?")
+
+        # children
+        self.assertEqual(obj.paragraphs.sentences.blocks.words, obj.words)
+        self.assertEqual(obj.sentences.words, obj.words)
+        self.assertEqual(obj.blocks.words, obj.words)
+        # count
+        self.assertEqual(len(obj.words), 8)
+        self.assertEqual(len(obj.paragraphs[1].words), len(obj.words[-5:]))
+        self.assertEqual(len(obj.sentences[2:].words), 1)
+        # str
+        self.assertEqual(str(obj.words), 'Test this up New block new problems Yes')
+        self.assertEqual(str(obj.paragraphs[0].blocks[0].words[1:]), 'this up')
+        self.assertEqual(str(obj.words[-3:-1]), 'new problems')
+        # after/before
+        self.assertEqual(obj.words[4]._after, [])
+        # slices
+        res = []
+        for item in obj.paragraphs[1].words:
+            res.append( str(item)[:2] )
+            res.append( len(item[:]) )
+        self.assertEqual(res, ['Ne', 3, 'bl', 5, 'ne', 3, 'pr', 8, 'Ye', 3])
+
+        test = []
+        expect = ['Te', 'T', 'Tt', 'th', 't', 'ts', 'up', 'u', 'u', 'Ne', 'N', 'N', 'bl', 'b', 'bc', 'ne', 'n', 'n', 'pr', 'p', 'pbm', 'Ye', 'Y', 'Y']
+        for item in obj.words:
+            test.append( item[:2] )
+            test.append( item[0] )
+            test.append( item[0::3] )
+        self.assertEqual(test, expect)
 
     def test_correct(self):
         obj = self.obj

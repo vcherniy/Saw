@@ -41,7 +41,13 @@ class Item:
         return result
 
     def __getitem__(self, key):
-        return self.children.__getitem__(key)
+        if self.children:
+            return self.children.__getitem__(key)
+        else:
+            return self._text.__getitem__(key)
 
     def __getslice__(self, i, j):
-        return self.children[i: j]
+        if self.children:
+            return self.children[i: j]
+        else:
+            return self._text[i: j]
