@@ -3,5 +3,6 @@ from item import Item
 from items import Items
 
 class Saw:
-    def load(self, text):
+    @staticmethod
+    def load(text):
         return Parse.load(text)

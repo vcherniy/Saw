@@ -20,7 +20,7 @@ C++, ...)\n"
 
 class Test_Saw(unittest.TestCase):
     def setUp(self):
-        self.obj = Saw().load(TEXT)
+        self.obj = Saw.load(TEXT)
 
     def test_paragraphs(self):
         obj = self.obj
@@ -122,7 +122,7 @@ class Test_Saw(unittest.TestCase):
         self.assertEqual(test, expect)
 
     def test_words(self):
-        obj = Saw().load("Test this up.\nNew block - new problems. Yes?")
+        obj = Saw.load("Test this up.\nNew block - new problems. Yes?")
 
         # children
         self.assertEqual(obj.paragraphs.sentences.blocks.words, obj.words)
@@ -182,7 +182,7 @@ class Test_Saw(unittest.TestCase):
 
     def test_pure(self):
         text = "Hi. This is, my - test? Yes, bad man!"
-        saw = Saw().load(text)
+        saw = Saw.load(text)
 
         self.assertEqual(str(saw.sentences[0].pure), 'Hi')
         self.assertEqual(str(saw.blocks[1].pure), 'This is')

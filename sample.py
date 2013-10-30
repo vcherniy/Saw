@@ -1,4 +1,5 @@
 from saw import Saw
+from saw.item import Item
 
 text = "The next JavaScript specification is moving towards completion. \
 TC39, the technical committee charged with creating ES.next (also known \
@@ -10,7 +11,7 @@ to the experts\". They need our help."
 
 #text = 'First sentence. Two, serios text?'
 
-saw = Saw().load(text)
+saw = Saw.load(text)
 """
 for p in saw.paragraphs:
 	for s in p.sentences:
@@ -41,7 +42,7 @@ st = datetime.datetime.now()
 
 tr = text * 1
 #Sentences.parse(tr)
-saw = Saw().load(tr)
+saw = Saw.load(tr)
 et = datetime.datetime.now()
 print saw.sentences[2:6].blocks[2:].words
 print '-------'
@@ -53,4 +54,19 @@ print saw.blocks[12].words[:-2:2]
 
 if str(saw.blocks.words) == str(saw.words):
 	print 'FUCK ME'
+
+
+import sys
+
+st = datetime.datetime.now()
+a = []
+_size = 0
+for k in xrange(10000):
+	i = Item()
+	_size += sys.getsizeof(i)
+	a.append(i)
+et = datetime.datetime.now()
+
+print "Memory: %s" % str(sys.getsizeof(a) + _size)
+print "Time: %s" % str(et - st)
 #print repr(saw)
