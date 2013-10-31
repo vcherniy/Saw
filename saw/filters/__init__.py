@@ -29,10 +29,11 @@ class Filter:
     def get(self, name, item):
         if not(self.exists(name)):
             raise Exception("Filter not found!")
+        _filter = self._filters[ name ]()
         func_name = item.__class__.__name__.lower()
-        func = getattr( self._filters[ name ](), func_name)
-        if not(func):
+        if not hasattr(_filter, func_name):
             raise Exception("Filter's method '%s' not found!" % func_name)
+        func = getattr(_filter, func_name)
 
         def _call(*args, **kw):
             return func(item, *args, **kw)
