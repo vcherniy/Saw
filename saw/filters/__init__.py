@@ -1,7 +1,6 @@
 import os
 import glob
 import inspect
-import saw.items
 
 curr_path = os.path.dirname(__file__)
 __all__ = [ os.path.basename(f)[:-3] for f in glob.glob(curr_path + "/*.py")]
@@ -30,12 +29,10 @@ class Filter:
     def get(self, name, item):
         if not(self.exists(name)):
             raise Exception("Filter not found!")
-
-        filter_class = self._filters[ name ]()
-        if isinstance(item, saw.items.Items):
-            func = filter_class.items
-        else:
-            func = filter_class.item
+        func_name = item.__class__.__name__.lower()
+        func = getattr( self._filters[ name ](), func_name)
+        if not(func):
+            raise Exception("Filter's method '%s' not found!" % func_name)
 
         def _call(*args, **kw):
             return func(item, *args, **kw)
