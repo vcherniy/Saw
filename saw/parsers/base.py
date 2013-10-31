@@ -17,7 +17,6 @@ class Base:
 
             children.append(item)
             item = Item()
-
         # When ._text or ._after were assigned, it items were
         # added to children
         if item.children:
