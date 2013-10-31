@@ -49,12 +49,11 @@ for s in saw.sentences[5:7]:
 
 print '---------'
 
-
 # should work
-saw.sentences.lower().words == saw.sentences.each().this.lower().get().words == saw.sentences.each().lower().get().words
+print saw.sentences.lower() == saw.sentences.each().error.lower().get() == saw.sentences.each().lower().get()
 
 # get first block each paragraphs, save to variable, and lower it and save to another variable
 result = None
-result2 = saw.paragraphs.each().blocks[0].save_to(result).lower().get()
+#result2 = saw.paragraphs.each().blocks[0].save_to(result).lower().get()
 
 

@@ -4,7 +4,7 @@ from filters import Filter
 class Item:
     # has attribute with direch children and name as children type
     # example: .words
-    str_dir = dir('')
+    _str_dir = dir('')
 
     def __init__(self):
         self._after = []
@@ -32,14 +32,14 @@ class Item:
     # else call this function
     def __getattr__(self, name):
         name = str(name)
-        result = Items()
 
-        if name in self.str_dir:
+        if name in self._str_dir:
             return getattr(self.__str__(), name)
 
         if Filter.exists(name):
             return Filter.get(name, self)
 
+        result = Items()
         if ('children' in self.__dict__) and self.children:
             result = getattr(self.children, name, [])
         return result

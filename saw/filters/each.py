@@ -10,15 +10,12 @@ class Each:
         return self.__items
 
     def __getattr__(self, name):
-        if hasattr(self.__items[0], name):
-            for key, item in enumerate(self.__items):
-                self.__items[key] = getattr(item, name)
+        if len(self.__items):
+            self.__items = [ getattr(item, name) for item in self.__items ]
 
             if callable( self.__items[0] ):
                 def wrapper(*args, **kw):
-                    for key, item in enumerate(self.__items):
-                        self.__items[key] = item(*args, **kw)
+                    self.__items = [ item(*args, **kw) for item in self.__items ]
                     return self
                 return wrapper
-            return self
-        raise AttributeError(name)
+        return self

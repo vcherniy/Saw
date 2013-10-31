@@ -1,16 +1,27 @@
 from filters import Filter
 
 class Items(list):
+    _str_dir = dir('')
+
     def __str__(self):
         return ' '.join( (str(x) for x in self) )
 
     def __getattr__(self, name):
         name = str(name)
-        result = Items()
+
+        if name in self._str_dir:
+            result = Items( getattr(item, name) for item in self )
+
+            if len(result) and callable( result[0] ):
+                def wrapper(*args, **kw):
+                    return Items( item(*args, **kw) for item in result)
+                return wrapper
+            return result
 
         if Filter.exists(name):
             return Filter.get(name, self)
 
+        result = Items()
         for item in self:
             result.extend( getattr(item, name, []) )
         return result
@@ -23,4 +34,4 @@ class Items(list):
 
     def __getslice__(self, i, j):
         result = super(Items, self).__getslice__(i, j)
-        return Items(result)   
+        return Items(result)
