@@ -184,17 +184,17 @@ class Test_Saw(unittest.TestCase):
         text = "Hi. This is, my - test? Yes, bad man!"
         saw = Saw.load(text)
 
-        self.assertEqual(str(saw.sentences[0].pure), 'Hi')
-        self.assertEqual(str(saw.blocks[1].pure), 'This is')
-        self.assertEqual(str(saw.blocks[1][1].pure), 'is')
+        self.assertEqual(str(saw.sentences[0].pure()), 'Hi')
+        self.assertEqual(str(saw.blocks[1].pure()), 'This is')
+        self.assertEqual(str(saw.blocks[1][1].pure()), 'is')
 
-        self.assertEqual(str(saw.sentences.pure), "Hi This is, my - test Yes, bad man")
-        self.assertEqual(str(saw.blocks.pure), "Hi This is my test Yes bad man")
-        self.assertEqual(str(saw.words.pure), "Hi This is my test Yes bad man")
+        self.assertEqual(str(saw.sentences.pure()), "Hi This is, my - test Yes, bad man")
+        self.assertEqual(str(saw.blocks.pure()), "Hi This is my test Yes bad man")
+        self.assertEqual(str(saw.words.pure()), "Hi This is my test Yes bad man")
 
-        self.assertEqual(str(saw.paragraphs.pure.sentences), "Hi. This is, my - test? Yes, bad man!")
-        self.assertEqual(str(saw.sentences.pure.blocks), "Hi This is, my - test Yes, bad man")
-        self.assertEqual(str(saw.blocks.pure.words), "Hi This is my test Yes bad man")
+        self.assertEqual(str(saw.paragraphs.pure().sentences), "Hi. This is, my - test? Yes, bad man!")
+        self.assertEqual(str(saw.sentences.pure().blocks), "Hi This is, my - test Yes, bad man")
+        self.assertEqual(str(saw.blocks.pure().words), "Hi This is my test Yes bad man")
 
 if __name__ == "__main__":
     unittest.main()

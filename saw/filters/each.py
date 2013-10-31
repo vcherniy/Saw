@@ -3,17 +3,13 @@ class Each:
         return self.items( item.children )
 
     def items(self, items):
-        self.__items = []
-        for item in items:
-            self.__items.append( item )
+        self.__items = [ item for item in items ]
         return self
 
     def get(self):
         return self.__items
 
     def __getattr__(self, name):
-        name = str(name)
-
         if hasattr(self.__items[0], name):
             for key, item in enumerate(self.__items):
                 self.__items[key] = getattr(item, name)

@@ -6,4 +6,4 @@ class Pure:
         return new_item
 
     def items(self, items):
-        return items.__class__( x.pure for x in items )
+        return items.__class__( x.pure() for x in items )

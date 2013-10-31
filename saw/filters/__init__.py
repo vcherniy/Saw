@@ -27,14 +27,19 @@ class Filter:
         return name in self._filters
 
     @classmethod
-    def apply(self, name, item):
+    def get(self, name, item):
         if not(self.exists(name)):
-            return item
+            raise Exception("Filter not found!")
 
         filter_class = self._filters[ name ]()
         if isinstance(item, saw.items.Items):
-            return filter_class.items(item)
+            func = filter_class.items
         else:
-            return filter_class.item(item)
+            func = filter_class.item
+
+        def _call(*args, **kw):
+            return func(item, *args, **kw)
+        return _call
+
 
 Filter._load_filters()

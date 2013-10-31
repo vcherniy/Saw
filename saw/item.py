@@ -34,7 +34,7 @@ class Item:
         result = Items()
 
         if Filter.exists(name):
-            return Filter.apply(name, self)
+            return Filter.get(name, self)
 
         if ('children' in self.__dict__) and self.children:
             result = getattr(self.children, name, [])

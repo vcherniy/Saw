@@ -57,7 +57,7 @@ if str(saw.blocks.words) == str(saw.words):
 
 
 print ' ---- each ---'
-kt = saw.sentences.each.blocks.words[:3].get()
+kt = saw.sentences.each().blocks.pure().words[:3].get()
 for s in kt:
 	print '** ' + str(s)
 print ' ------- '

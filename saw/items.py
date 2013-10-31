@@ -9,7 +9,7 @@ class Items(list):
         result = Items()
 
         if Filter.exists(name):
-            return Filter.apply(name, self)
+            return Filter.get(name, self)
 
         for item in self:
             result.extend( getattr(item, name, []) )
