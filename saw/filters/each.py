@@ -1,6 +1,9 @@
 class Each:
+    def __init__(self):
+        self.__items = []
+
     def item(self, item):
-        return self.items( item.children )
+        return self.items(item.children)
 
     def items(self, items):
         self.__items = [ item for item in items ]
@@ -9,11 +12,11 @@ class Each:
     def get(self):
         return self.__items
 
-    def __getattr__(self, name):
+    def __getattr__(self, attr):
         if len(self.__items):
-            self.__items = [ getattr(item, name) for item in self.__items ]
+            self.__items = [ getattr(item, attr) for item in self.__items ]
 
-            if callable( self.__items[0] ):
+            if callable(self.__items[0]):
                 def wrapper(*args, **kw):
                     self.__items = [ item(*args, **kw) for item in self.__items ]
                     return self
