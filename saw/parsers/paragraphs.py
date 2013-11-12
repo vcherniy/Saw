@@ -1,4 +1,4 @@
-from saw.parsers.sentences import Sentences
+from saw.parsers.sentences import Parser, Sentences
 
 
 class Paragraphs(Parser):

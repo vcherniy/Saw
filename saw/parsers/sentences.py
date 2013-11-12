@@ -1,5 +1,5 @@
 import re
-from saw.parsers.blocks import Blocks
+from saw.parsers.blocks import Parser, Blocks
 
 
 class Sentences(Parser):
@@ -15,7 +15,8 @@ class Sentences(Parser):
         # we allow .09 as not end of sentences
         for m in re.finditer('[\!\?\.]+', text):
             curr, _next = m.start(), m.end()
-            items = list( text[curr: _next].strip() )
+            items = list( text[curr: _next] )
+            print(items)
 
             if (_len > _next) and not (text[_next] == ' '):
                 # delete ending '.' if they not before space or end of string

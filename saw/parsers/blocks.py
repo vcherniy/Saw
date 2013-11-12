@@ -1,6 +1,5 @@
 import re
-from saw.parsers import Parser
-from saw.parsers.words import Words
+from saw.parsers.words import Parser, Words
 
 
 class Blocks(Parser):

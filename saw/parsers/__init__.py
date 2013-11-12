@@ -1,6 +1,5 @@
 from saw.items import Items
 from saw.item import Item
-from saw.parsers.paragraphs import Paragraphs
 
 
 class Parser:
@@ -27,9 +26,3 @@ class Parser:
             children.append(item)
         if children:
             saw.__dict__[cls._type] = saw.children = children
-
-    @staticmethod
-    def load_all(text):
-        saw = Item()
-        Paragraphs.load(saw, text)
-        return saw
