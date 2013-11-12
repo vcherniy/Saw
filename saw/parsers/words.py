@@ -1,7 +1,7 @@
-import base
+from saw.parsers import Parser
 
 
-class Words(base.Base):
+class Words(Parser):
     _type = 'words'
     child_class = None
 

@@ -1,5 +1,5 @@
-from items import Items
-from filters import Filter
+from saw.items import Items
+from saw.filters import Filter
 
 class Item:
     # has attribute with direch children and name as children type

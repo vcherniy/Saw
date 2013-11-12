@@ -1,9 +1,9 @@
-import base
-from words import Words
 import re
+from saw.parsers import Parser
+from saw.parsers.words import Words
 
 
-class Blocks(base.Base):
+class Blocks(Parser):
     _type = 'blocks'
     child_class = Words
 

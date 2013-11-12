@@ -1,8 +1,7 @@
-import base
-from sentences import Sentences
+from saw.parsers.sentences import Sentences
 
 
-class Paragraphs(base.Base):
+class Paragraphs(Parser):
     _type = 'paragraphs'
     child_class = Sentences
 

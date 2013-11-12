@@ -1,9 +1,8 @@
-import base
-from blocks import Blocks
 import re
+from saw.parsers.blocks import Blocks
 
 
-class Sentences(base.Base):
+class Sentences(Parser):
     _type = 'sentences'
     child_class = Blocks
 
