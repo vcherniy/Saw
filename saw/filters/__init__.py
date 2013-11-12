@@ -2,42 +2,43 @@ import os
 import glob
 import inspect
 
-curr_path = os.path.dirname(__file__)
-__all__ = [ os.path.basename(f)[:-3] for f in glob.glob(curr_path + "/*.py")]
 
 class Filter:
     _filters = dict()
 
     @classmethod
-    def _load_filters(self):
-        module_names = [ name.lower() for name in __all__ if name != '__init__' ]
+    def load_filters(cls):
+        curr_path = os.path.dirname(__file__)
+        module_names = [os.path.basename(fname)[:-3].lower() for fname in glob.glob(curr_path + "/*.py")
+                        if fname != '__init__.py']
         filters = __import__('saw.filters', globals(), locals(), module_names, -1)
 
         for module_name in module_names:
-            _filter = getattr(filters, module_name)
+            filter_module = getattr(filters, module_name)
 
-            for obj_name, obj in inspect.getmembers(_filter):
+            for obj_name, obj in inspect.getmembers(filter_module):
                 if (obj_name.lower() == module_name) and inspect.isclass(obj):
-                    self._filters[ module_name ] = obj
+                    cls._filters[module_name] = obj
                     break
 
     @classmethod
-    def exists(self, name):
-        return name in self._filters
+    def exists(cls, name):
+        return name in cls._filters
 
     @classmethod
-    def get(self, name, item):
-        if not(self.exists(name)):
+    def get(cls, filter_name, item):
+        if not(cls.exists(filter_name)):
             raise Exception("Filter not found!")
-        _filter = self._filters[ name ]()
+        # get class name of input variable and call filter's method with its name.
         func_name = item.__class__.__name__.lower()
-        if not hasattr(_filter, func_name):
-            raise Exception("Filter's method '%s' not found!" % func_name)
-        func = getattr(_filter, func_name)
+        filter_class = cls._filters[filter_name]
+        if not hasattr(filter_class, func_name):
+            raise Exception("Filter '%s' has not method '%s'!" % (filter_name, func_name))
 
-        def _call(*args, **kw):
-            return func(item, *args, **kw)
-        return _call
+        def callback(*args, **kw):
+            return getattr(filter_class(), func_name)(item, *args, **kw)
+        return callback
 
 
-Filter._load_filters()
+if __name__ == '__main__':
+    Filter.load_filters()
