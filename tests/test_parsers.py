@@ -14,9 +14,9 @@ class TestSaw(unittest.TestCase):
         """
         Explode by: \n
         """
-        text = "Hi. Mine. \n These items:\n- First item,\n- Second item,   \n - Third item  .\n\nEnded\n"
-        expect = ['Hi. Mine.', ["\n"], 'These items:', ["\n"], '- First item,', ["\n"], '- Second item,', ["\n"],
-                  '- Third item  .', ["\n", "\n"], 'Ended', ["\n"]]
+        text = "Hi. Mine. \n These items:\n- First item,\n- Second item,   \n - Third item  .\n\nEnded"
+        expect = [[], 'Hi. Mine.', ["\n"], 'These items:', ["\n"], '- First item,', ["\n"], '- Second item,', ["\n"],
+                  '- Third item  .', ["\n", "\n"], 'Ended', []]
         self.assertEqual(Paragraphs.parse(text), expect)
 
     def test_sentences(self):
@@ -29,8 +29,8 @@ class TestSaw(unittest.TestCase):
         self.assertEqual(Sentences.parse(text), expect)
 
         text = "Test! ! ft.?. start..end ..before and.  ending text"
-        expect = ['Test', ['! ', ' ! '], 'ft', ['.', '?', '. '], 'start', ['.', '.'], 'end',
-                  [' .', '.'], 'before and', ['. '], 'ending text']
+        expect = [[], 'Test', ['! ', ' ! '], 'ft', ['.', '?', '. '], 'start', ['.', '.'], 'end',
+                  [' .', '.'], 'before and', ['. '], 'ending text', []]
         self.assertEqual(Sentences.parse(text), expect)
 
     def test_blocks(self):
@@ -46,7 +46,7 @@ class TestSaw(unittest.TestCase):
 
             # Test: spaces before, after, around; another symbols; few spaces
             text = "This example{0}   with {0} another. comb!  of {0}spaces".format(rule)
-            expect = ['This example', [r_rule], 'with', [a_rule], 'another. comb!  of', [l_rule], 'spaces']
+            expect = [[], 'This example', [r_rule], 'with', [a_rule], 'another. comb!  of', [l_rule], 'spaces', []]
             self.assertEqual(Blocks.parse(text), expect)
 
             # Test: duplicated symbols, another symbol between it; symbol in the end of string.
@@ -57,7 +57,7 @@ class TestSaw(unittest.TestCase):
 
             # Test: inject symbols to strings
             text = "Text {0}{0}no{0}br to t{0}{0}mobile".format(rule)
-            expect = ['Text', [l_rule, rule], 'no', [rule], 'br to t', [rule, rule], 'mobile']
+            expect = [[], 'Text', [l_rule, rule], 'no', [rule], 'br to t', [rule, rule], 'mobile', []]
             self.assertEqual(Blocks.parse(text), expect)
 
     def test_words(self):

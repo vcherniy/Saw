@@ -11,13 +11,13 @@ class Paragraphs(Parser):
         result, tmp = [], []
         for item in items:
             if item != '':
-                if tmp:
-                    result.append(tmp)
-                    tmp = []
+                result.append(tmp)
                 result.append(item.strip())
+                tmp = []
             tmp.append("\n")
         # end of string will add \n. We should ignore it.
         tmp.pop()
-        if tmp:
-            result.append(tmp)
+        if not tmp:
+            tmp = []
+        result.append(tmp)
         return result
