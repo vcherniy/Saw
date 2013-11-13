@@ -1,5 +1,4 @@
 class Sentences:
-
     @classmethod
     def sentences(cls, before, string, after):
         while before and (before[-1] == '.'):

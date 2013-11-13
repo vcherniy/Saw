@@ -47,23 +47,30 @@ class Parser:
         return result
 
     @classmethod
+    def _process_mods(cls, data):
+        # TODO: fix asap
+        if cls._type != 'words':
+            Mod.load_mods()
+            for i in range(0, len(data) - 1, 2):
+                tmp = Mod.get(cls._type, data[i: i + 3])
+                data[i], data[i+1], data[i+2] = tmp[0], tmp[1], tmp[2]
+        return data
+
+    @classmethod
     def load(cls, saw: Item, text, process_mods=True):
         saw.children = []
         data = cls.parse(text)
 
         if process_mods:
-            # TODO: fix asap
-            if cls._type != 'words':
-                Mod.load_mods()
-                for i in range(0, len(data) - 1, 2):
-                    tmp = Mod.get(cls._type, data[i: i + 3])
-                    data[i], data[i+1], data[i+2] = tmp[0], tmp[1], tmp[2]
-                data = [item for item in data if item]
+            data = cls._process_mods(data)
 
         prev_type = 'list'
         need_new = True
 
         for item in data:
+            # delete empty items
+            if not item:
+                continue
             if isinstance(item, list):
                 prev_type = 'list'
                 # If it is no first item
