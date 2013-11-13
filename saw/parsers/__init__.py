@@ -18,24 +18,26 @@ class Parser:
         for m in re.finditer(cls._format, text):
             curr, _next = m.start(), m.end()
 
+            # append string and nodes what were before it
             if prev < curr:
                 node = text[prev:curr].strip()
                 if node != '':
                     result.append(old_items)
                     result.append(node)
                     old_items = []
-
+            # format nodes
             items = list(text[curr: _next])
             if (curr > 0) and (text[curr - 1] == ' '):
                 items[0] = ' ' + items[0]
             if (_len > _next) and (text[_next] == ' '):
                 items[-1] += ' '
             old_items.extend(items)
-
+            # set start for next iteration
             prev = _next
 
+        # Whether empty or not - last item must be List.
         result.append(old_items)
-
+        # If after last nodes exists string
         if _len > prev:
             node = text[prev:].strip()
             if node:
@@ -51,7 +53,7 @@ class Parser:
         for item in cls.parse(text):
             if isinstance(item, list):
                 # If it is no first item
-                # (first item is empty, and words array has not nodes)
+                # (first item is empty), (words has not nodes)
                 if need_new and item:
                     saw.children.append(Item())
                     need_new = False
