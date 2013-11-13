@@ -64,7 +64,7 @@ class TestSaw(unittest.TestCase):
         """
         Explode by: spaces
         """
-        text = "Test with  many  . spaces. and: -,end  "
+        text = "Test with  many  .   spaces. and: -,end  "
         expect = ['Test', 'with', 'many', '.', 'spaces.', 'and:', '-,end']
         self.assertEqual(Words.parse(text), expect)
 

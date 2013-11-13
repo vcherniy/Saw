@@ -3,7 +3,7 @@ from saw.parsers.sentences import Parser, Sentences
 
 class Paragraphs(Parser):
     _type = 'paragraphs'
-    child_class = Sentences
+    _child_class = Sentences
 
     @staticmethod
     def parse(text):

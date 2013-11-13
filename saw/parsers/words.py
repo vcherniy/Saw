@@ -3,7 +3,6 @@ from saw.parsers import Parser
 
 class Words(Parser):
     _type = 'words'
-    child_class = None
 
     @staticmethod
     def parse(text):
