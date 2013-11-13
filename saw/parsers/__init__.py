@@ -1,6 +1,7 @@
 from saw.items import Items
 from saw.item import Item
 import re
+from saw.mods import Mod
 
 
 class Parser:
@@ -46,12 +47,25 @@ class Parser:
         return result
 
     @classmethod
-    def load(cls, saw: Item, text, process_modificators = True):
+    def load(cls, saw: Item, text, process_mods=True):
         saw.children = []
+        data = cls.parse(text)
+
+        if process_mods:
+            # TODO: fix asap
+            if cls._type != 'words':
+                Mod.load_mods()
+                for i in range(0, len(data) - 1, 2):
+                    tmp = Mod.get(cls._type, data[i: i + 3])
+                    data[i], data[i+1], data[i+2] = tmp[0], tmp[1], tmp[2]
+                data = [item for item in data if item]
+
+        prev_type = 'list'
         need_new = True
 
-        for item in cls.parse(text):
+        for item in data:
             if isinstance(item, list):
+                prev_type = 'list'
                 # If it is no first item
                 # (first item is empty), (words has not nodes)
                 if need_new and item:
@@ -73,10 +87,12 @@ class Parser:
                             n = n.strip()
                         saw.children[-1].after_append(n)
             else:
-                saw.children.append(Item())
+                if prev_type != 'str':
+                    saw.children.append(Item())
                 # TODO: Fix it asap
                 if cls._type == 'words':
-                    saw.children[-1].text(item)
+                    saw.children[-1].text_append(item)
                 # right nodes will be joined to it string
                 need_new = False
+                prev_type = 'str'
         return saw

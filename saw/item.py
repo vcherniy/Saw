@@ -24,6 +24,9 @@ class Item:
     def text(self, text):
         self._text = text
 
+    def text_append(self, text):
+        self._text += text
+
     def __repr__(self):
         result = self.__dict__
         result.pop("children", None)
