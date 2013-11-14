@@ -90,13 +90,15 @@ class Parser:
                         saw.children[-1].after_append(n.strip())
                         need_new = True
                     else:
+                        # TODO: fix it asap
                         if not cls._type == 'paragraphs':
                             n = n.strip()
                         saw.children[-1].after_append(n)
             else:
-                if prev_type != 'str':
+                # TODO: fix it asap
+                if (prev_type != 'str') or (cls._type == 'words'):
                     saw.children.append(Item())
-                # TODO: Fix it asap
+                # TODO: fix it asap
                 if cls._type == 'words':
                     saw.children[-1].text_append(item)
                 # right nodes will be joined to it string

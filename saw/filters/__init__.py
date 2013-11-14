@@ -1,25 +1,14 @@
 import os
 import glob
 import inspect
-
+from saw.mods import Mod
 
 class Filter:
     _filters = dict()
 
     @classmethod
     def load_filters(cls):
-        curr_path = os.path.dirname(__file__)
-        module_names = [os.path.basename(fname)[:-3].lower() for fname in glob.glob(curr_path + "/*.py")
-                        if fname != '__init__.py']
-        filters = __import__('saw.filters', globals(), locals(), module_names, -1)
-
-        for module_name in module_names:
-            filter_module = getattr(filters, module_name)
-
-            for obj_name, obj in inspect.getmembers(filter_module):
-                if (obj_name.lower() == module_name) and inspect.isclass(obj):
-                    cls._filters[module_name] = obj
-                    break
+        cls._filters = Mod.load_modules(__file__, 'saw.filters')
 
     @classmethod
     def exists(cls, name):
