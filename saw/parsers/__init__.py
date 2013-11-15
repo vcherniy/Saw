@@ -48,12 +48,10 @@ class Parser:
 
     @classmethod
     def _process_mods(cls, data):
-        # TODO: fix asap
-        if cls._type != 'words':
-            Mod.load_mods()
-            for i in range(0, len(data) - 1, 2):
-                tmp = Mod.get(cls._type, data[i: i + 3])
-                data[i], data[i+1], data[i+2] = tmp[0], tmp[1], tmp[2]
+        Mod.load_mods()
+        for i in range(0, len(data) - 1, 2):
+            tmp = Mod.get(cls._type, data[i: i + 3])
+            data[i], data[i+1], data[i+2] = tmp[0], tmp[1], tmp[2]
         return data
 
     @classmethod

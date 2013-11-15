@@ -1,9 +1,8 @@
 import unittest
-
-from saw.parsers.blocks import Blocks
-from saw.parsers.words import Words
+#from saw.parsers.paragraphs import Paragraphs
 from saw.parsers.sentences import Sentences
-from saw.parsers.paragraphs import Paragraphs
+#from saw.parsers.blocks import Blocks
+#from saw.parsers.words import Words
 
 from saw.parsers import Item
 

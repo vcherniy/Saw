@@ -1,7 +1,5 @@
-import os
-import glob
-import inspect
 from saw.mods import Mod
+
 
 class Filter:
     _filters = dict()

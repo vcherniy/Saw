@@ -7,3 +7,7 @@ class Words(Parser):
     @staticmethod
     def parse(text):
         return [x.strip() for x in text.split(' ') if x != '']
+
+    @classmethod
+    def _process_mods(cls, data):
+        return data
