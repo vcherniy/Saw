@@ -46,6 +46,8 @@ class Parser:
                 result.append([])
         return result
 
+    # =========== Load ==============
+
     @classmethod
     def _process_mods(cls, data):
         Mod.load_mods()
@@ -55,51 +57,61 @@ class Parser:
         return data
 
     @classmethod
+    def _process_string(cls, saw, text):
+        saw.children.append(Item())
+
+    @classmethod
+    def _process_list(cls, saw, item):
+        if not item:
+            return
+
+        # delete first space into first list item
+        # prevent add new item right after text string
+        if item[0][0] == ' ':
+            item[0] = item[0][1:]
+
+        need_new = False
+        for n in item:
+            # if ' x' and before it no string (were another nodes in list)
+            # because string join first node after it whether this node has left-space or not
+            if n[0] == ' ':
+                saw.children.append(Item())
+                saw.children[-1].after_append(n.strip())
+                need_new = False
+            # if 'x ' then append node to current item and request
+            # create new item on next iteration.
+            else:
+                # If it is no first item
+                # (first item is empty), (words has not nodes)
+                if need_new:
+                    saw.children.append(Item())
+                    need_new = False
+                if n[-1] == ' ':
+                    saw.children[-1].after_append(n.strip())
+                    need_new = True
+                else:
+                    # TODO: fix it asap
+                    if not cls._type == 'paragraphs':
+                        n = n.strip()
+                    saw.children[-1].after_append(n)
+
+    @classmethod
+    def _load(cls, saw, data):
+        if data[0]:
+            saw.children.append(Item())
+
+        cls._process_list(saw, data[0])
+        for i in range(1, len(data) - 1, 2):
+            cls._process_string(saw, data[i])
+            cls._process_list(saw, data[i + 1])
+
+    @classmethod
     def load(cls, saw: Item, text, process_mods=True):
         saw.children = []
         data = cls.parse(text)
-
         if process_mods:
             data = cls._process_mods(data)
 
-        prev_type = 'list'
-        need_new = True
-
-        for item in data:
-            # delete empty items
-            if not item:
-                continue
-            if isinstance(item, list):
-                prev_type = 'list'
-                # If it is no first item
-                # (first item is empty), (words has not nodes)
-                if need_new and item:
-                    saw.children.append(Item())
-                    need_new = False
-                for n in item:
-                    # if ' x' and before it no string (were another nodes in list)
-                    # because string join first node after it whether this node has left-space or not
-                    if n[0] == ' ' and saw.children[-1].after_count():
-                        saw.children.append(Item())
-                        saw.children[-1].after_append(n.strip())
-                    # if 'x ' then append node to current item and request
-                    # create new item on next iteration.
-                    elif n[-1] == ' ':
-                        saw.children[-1].after_append(n.strip())
-                        need_new = True
-                    else:
-                        # TODO: fix it asap
-                        if not cls._type == 'paragraphs':
-                            n = n.strip()
-                        saw.children[-1].after_append(n)
-            else:
-                # TODO: fix it asap
-                if (prev_type != 'str') or (cls._type == 'words'):
-                    saw.children.append(Item())
-                # TODO: fix it asap
-                if cls._type == 'words':
-                    saw.children[-1].text_append(item)
-                # right nodes will be joined to it string
-                need_new = False
-                prev_type = 'str'
+        cls._load(saw, data)
         return saw
+
