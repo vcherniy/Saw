@@ -1,7 +1,7 @@
 import unittest
 #from saw.parsers.paragraphs import Paragraphs
 from saw.parsers.sentences import Sentences
-#from saw.parsers.blocks import Blocks
+from saw.parsers.blocks import Blocks
 #from saw.parsers.words import Words
 
 from saw.parsers import Item
@@ -38,6 +38,17 @@ class TestMods(unittest.TestCase):
             [[], '', []]                # ending text
         ]
         saw = Sentences.load(Item(), text)
+        self.assertEqual(self._form(saw), expect)
+
+    def test_blocks(self):
+        text = 'Too long smile. for-and and -simple, (connect af) 12'
+        expect = [
+            [[], '', [',']],    # Too long smile. for-and and -simple
+            [[], '', ['(']],    # (
+            [[], '', [')']],     # connect af)
+            [[], '', []]        # 12
+        ]
+        saw = Blocks.load(Item(), text)
         self.assertEqual(self._form(saw), expect)
 
 

@@ -9,17 +9,13 @@ class Words(Parser):
     def parse(text):
         return [x.strip() for x in text.split(' ') if x != '']
 
-    @classmethod
-    def _process_mods(cls, data):
-        return data
-
-    @classmethod
-    def _process_string(cls, saw, text):
+    @staticmethod
+    def _process_string(saw, text):
         _item = Item()
         _item.text_append(text)
         saw.children.append(_item)
 
     @classmethod
-    def _load(cls, saw, data):
+    def _load_children(cls, saw, data):
         for i in range(0, len(data), 1):
             cls._process_string(saw, data[i])
