@@ -69,54 +69,63 @@ class Parser:
         return data
 
     @classmethod
-    def _process_string(cls, saw, text):
+    def _process_string(cls, saw, text, to_before):
         if not text:
             return
-        saw.children.append(Item())
+        saw.children.append(Item().before(to_before))
 
     @classmethod
     def _process_list(cls, saw, item):
         if not item:
             return
-        # delete first space into first list item
-        # prevent add new item right after text string
-        if item[0][0] == ' ':
-            item[0] = item[0][1:]
 
-        need_new = False
-        for n in item:
-            # if ' x' and before it no string (were another nodes in list)
-            # because string join first node after it whether this node has left-space or not
-            if n[0] == ' ':
-                saw.children.append(Item())
-                saw.children[-1].after_append(n.strip())
-                need_new = False
-            # if 'x ' then append node to current item and request
-            # create new item on next iteration.
-            else:
-                # If it is no first item
-                # (first item is empty), (words has not nodes)
-                if need_new:
+        to_before = []
+        while item and (len(item[-1]) == 1):
+            to_before.append(item.pop())
+
+        if item:
+            # add to to_before element ' | .|..text'
+            if item[-1][0] == ' ' and (len(item[-1]) == 2):
+                to_before.append(item.pop().strip())
+
+            i, cnt = 0, len(item)
+            if item:
+                item[0] = item[0].strip()
+                if not saw.children:
                     saw.children.append(Item())
-                    need_new = False
-                if n[-1] == ' ':
-                    saw.children[-1].after_append(n.strip())
-                    need_new = True
-                else:
-                    # TODO: fix it asap
-                    if not cls._type == 'paragraphs':
-                        n = n.strip()
-                    saw.children[-1].after_append(n)
+            while (i < cnt) and (len(item[i]) == 1):
+                saw.children[-1].after_append(item[i])
+                i += 1
+
+            if (i < cnt) and (item[i][1] == ' '):
+                saw.children[-1].after_append(item[i].strip())
+                i += 1
+
+            if i < cnt:
+                need_new = True
+                while i < cnt:
+                    if item[i][0] == ' ':
+                        need_new = True
+                    if need_new:
+                        saw.children.append(Item())
+                        need_new = False
+                    if item[i][-1] == ' ':
+                        need_new = True
+                    saw.children[-1].after_append(item[i].strip())
+                    i += 1
+        elif saw.children:
+            saw.children[-1].after(to_before)
+            to_before = []
+        return to_before
 
     @classmethod
     def _load_children(cls, saw, data):
-        if data[0]:
-            saw.children.append(Item())
-
-        cls._process_list(saw, data[0])
+        to_before = cls._process_list(saw, data[0])
         for i in range(1, len(data) - 1, 2):
-            cls._process_string(saw, data[i])
-            cls._process_list(saw, data[i + 1])
+            cls._process_string(saw, data[i], to_before)
+            to_before = cls._process_list(saw, data[i + 1])
+        if to_before:
+            saw.children.append(Item().after(to_before))
 
     @classmethod
     def load(cls, saw: Item, text, process_mods=True):

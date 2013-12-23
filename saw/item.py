@@ -12,20 +12,25 @@ class Item:
         self._text = ''
         self.children = None
 
+    def before(self, _before):
+        self._before = _before
+        return self
+
     def after(self, _after):
         self._after = _after
+        return self
 
     def after_append(self, item):
         self._after.append(item)
-
-    def after_count(self):
-        return len(self._after)
+        return self
 
     def text(self, text):
         self._text = text
+        return self
 
     def text_append(self, text):
         self._text += text
+        return self
 
     def __repr__(self):
         result = self.__dict__
