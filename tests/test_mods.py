@@ -18,30 +18,30 @@ class TestMods(unittest.TestCase):
     def test_sentences(self):
         text = '?1 sentence! But what!!WTF   ? .That 12.45 points.   .   Length = 100m..'
         expect = [
-            [[], '', ['?']],        # ?
-            [[], '', ['!']],        # 1 sentence!
-            [[], '', ['!', '!']],   # But what!!
-            [[], '', ['?']],        # WTF   ?
-            [[], '', ['.']],        # .That 12.45 points.
-            [[], '', ['.']],        # .
-            [[], '', ['.', '.']]    # Length = 100m..
+            [['?'], '', ['!']],        # ?1 sentence!
+            [[],    '', ['!', '!']],   # But what!!
+            [[],    '', ['?']],        # WTF   ?
+            [[],    '', ['.']],        # .That 12.45 points.
+            [[],    '', ['.']],        # .
+            [[],    '', ['.', '.']]    # Length = 100m..
         ]
         saw = Sentences.load(Item(), text)
         self.assertEqual(self._form(saw), expect)
 
-        text = "Test! ! ft.?. start..end ..before and.  ending text"
+        text = "Test! ! ft.?. start..end ..before and.  .!.ending text"
         expect = [
-            [[], '', ['!']],            # Test!
-            [[], '', ['!']],            # !
-            [[], '', ['.', '?', '.']],  # ft.?.
-            [[], '', ['.']],            # start..end ..before and.
-            [[], '', []]                # ending text
+            [[],         '', ['!']],            # Test!
+            [[],         '', ['!']],            # !
+            [[],         '', ['.', '?', '.']],  # ft.?.
+            [[],         '', ['.']],            # start..end ..before and.
+            [['.', '!'], '', []]                # .!.ending text
         ]
         saw = Sentences.load(Item(), text)
         self.assertEqual(self._form(saw), expect)
 
     def test_blocks(self):
-        text = 'Too long smile. for-and and -simple, (connect af) 12'
+        # [',', ':', '=', '+', ';', '*', '"', '-', "'", '{', '(', '[', ']', ')', '}', ]
+        text = 'Too long: :smil:e, for-and and -simple=at, (connect af) 12; *test* and "now" {text again }'
         expect = [
             [[], '', [',']],    # Too long smile. for-and and -simple
             [[], '', ['(']],    # (
