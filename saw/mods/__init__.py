@@ -46,4 +46,5 @@ class Mod:
 
         for class_name in cls._mods[name]:
             data = getattr(cls._mods_class[class_name](), name)(*data)
+            #getattr(cls._mods_class[class_name](), name)(before, target, after)
         return data

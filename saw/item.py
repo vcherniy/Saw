@@ -1,6 +1,7 @@
 from saw.items import Items
 from saw.filters import Filter
 
+
 class Item:
     # has attribute with direch children and name as children type
     # example: .words
@@ -33,7 +34,7 @@ class Item:
         return self
 
     def __repr__(self):
-        result = self.__dict__
+        result = self.__dict__.copy()
         result.pop("children", None)
         if not(self._before): result.pop('_before', None)
         if not(self._after): result.pop('_after', None)

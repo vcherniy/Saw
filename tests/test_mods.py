@@ -26,6 +26,7 @@ class TestMods(unittest.TestCase):
             [[],    '', ['.', '.']]    # Length = 100m..
         ]
         saw = Sentences.load(Item(), text)
+        #print(self._form(saw))
         self.assertEqual(self._form(saw), expect)
 
         text = "Test! ! ft.?. start..end ..before and.  .!.ending text"
