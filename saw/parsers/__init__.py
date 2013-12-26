@@ -49,6 +49,26 @@ class Parser:
     # =========== Load ==============
 
     @classmethod
+    def _process_mods(cls, data):
+        Mod.load_mods()
+
+        for i in range(0, len(data) - 1, 2):
+            tmp = Mod.get(cls._type, data[i: i + 3])
+            data[i], data[i + 1], data[i + 2] = tmp[0], tmp[1], tmp[2]
+
+        # correct string if list is empty
+        _max = len(data) - 3
+        _from, _to = 2, 1
+        while _from <= _max:
+            if not data[_from]:
+                data[_to] += data[_from + 1]
+                data[_from + 1] = ''
+            else:
+                _to = _from + 1
+            _from += 2
+        return data
+
+    @classmethod
     def _process_string(cls, saw, text, to_before):
         if not text:
             return
@@ -110,12 +130,16 @@ class Parser:
     @classmethod
     def load(cls, saw: Item, text, process_mods=True):
         saw.children = []
-        Mod.load_mods()
+        #Mod.load_mods()
 
         data = cls.parse(text)
 
+        if process_mods:
+            data = cls._process_mods(data)
+
         cls._load_children(saw, data)
 
+        """ For filters after
         if process_mods:
             ln = len(saw.children)
             if ln == 1:
@@ -126,6 +150,7 @@ class Parser:
                 for i in range(1, ln - 1):
                     Mod.get(cls._type, saw.children[i - 1], saw.children[i], saw.children[i + 1])
                 Mod.get(cls._type, saw.children[-2], saw.children[-1], Item())
+        """
 
         if cls._child_class:
             for x in saw.children:
