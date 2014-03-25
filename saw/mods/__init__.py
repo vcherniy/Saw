@@ -4,13 +4,13 @@ import inspect
 
 
 class Mod:
-    _mods_class = {}
     _mods = {
         'paragraphs': [],
         'sentences': [],
         'blocks': [],
         'words': []
     }
+    loaded = False
 
     @staticmethod
     def load_modules(path, package_name):
@@ -22,29 +22,30 @@ class Mod:
         for module_name in module_names:
             module_obj = getattr(imported_modules, module_name)
 
-            for obj_name, obj in inspect.getmembers(module_obj):
-                if (obj_name.lower() == module_name) and inspect.isclass(obj):
-                    result[module_name] = obj
+            # import class from module what class name = module name
+            for cls_name, cls in inspect.getmembers(module_obj):
+                if (cls_name.lower() == module_name) and inspect.isclass(cls):
+                    result[module_name] = cls
                     break
         return result
 
     @classmethod
-    def load_mods(cls):
-        if cls._mods_class:
+    def init(cls):
+        if cls.loaded:
             return
-        cls._mods_class = cls.load_modules(__file__, 'saw.mods')
+        result = cls.load_modules(__file__, 'saw.mods')
 
-        for mod_name in cls._mods_class:
-            for attr_name, attr in inspect.getmembers(cls._mods_class[mod_name]):
+        for mod_name in result:
+            for attr_name, attr in inspect.getmembers(result[mod_name]):
                 if attr_name.lower() in cls._mods:
-                    cls._mods[ attr_name.lower() ].append(mod_name)
+                    cls._mods[ attr_name.lower() ].append(attr)
+        cls.loaded = True
 
     @classmethod
-    def get(cls, name: str, data: list):
+    def get(cls, name, data):
         if not(name in cls._mods):
             raise Exception("Mods not found!")
 
-        for class_name in cls._mods[name]:
-            data = getattr(cls._mods_class[class_name](), name)(*data)
-            #getattr(cls._mods_class[class_name](), name)(before, target, after)
+        for mod in cls._mods[name]:
+            data = mod(*data)
         return data

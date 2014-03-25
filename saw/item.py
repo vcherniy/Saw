@@ -1,5 +1,5 @@
-from saw.items import Items
-from saw.filters import Filter
+from items import Items
+from filters import Filter
 
 
 class Item:

@@ -1,4 +1,4 @@
-from saw.filters import Filter
+from filters import Filter
 
 class Items(list):
     _str_dir = dir('')

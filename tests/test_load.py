@@ -14,7 +14,7 @@ class TestLoad(unittest.TestCase):
 
     @staticmethod
     def _form(iem):
-        return [[item._before or [], item._text or '', item._after or []] for item in iem.children]
+        return [[item._before, item._text, item._after] for item in iem.children]
 
     def test_paragraphs(self):
         text = "Hi. Mine. \n These items:\n- First item,\n- Second item,   \n - Third item  .\n\nEnded\n"

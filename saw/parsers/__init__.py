@@ -1,4 +1,4 @@
-from saw.items import Items
+#from saw.items import Items
 from saw.item import Item
 import re
 from saw.mods import Mod
@@ -50,9 +50,10 @@ class Parser:
 
     @classmethod
     def _process_mods(cls, data):
-        Mod.load_mods()
+        Mod.init()
 
         for i in range(0, len(data) - 1, 2):
+            # pass [[,,], 'text', [,,]]
             tmp = Mod.get(cls._type, data[i: i + 3])
             data[i], data[i + 1], data[i + 2] = tmp[0], tmp[1], tmp[2]
 
@@ -75,44 +76,53 @@ class Parser:
         saw.children.append(Item().before(to_before).text(text))
 
     @classmethod
-    def _process_list(cls, saw, item):
-        if not item:
+    def _process_list(cls, saw, arr):
+        if not arr:
             return []
 
+        #  . , |.,|
         to_before = []
-        while item and (len(item[-1]) == 1):
-            to_before.append(item.pop())
+        while arr and (len(arr[-1]) == 1):
+            to_before.append(arr.pop())
 
-        if item:
+        if arr:
             # add to to_before element ' | .|..text'
-            if item[-1][0] == ' ' and (len(item[-1]) == 2):
-                to_before.append(item.pop().strip())
+            if arr[-1][0] == ' ' and (len(arr[-1]) == 2):
+                to_before.append(arr.pop().strip())
 
-            i, cnt = 0, len(item)
-            if item:
-                item[0] = item[0].strip()
+            # still items just for _after -- 'x..y' and 'x ..y' items were excluded 
+            i, cnt = 0, len(arr)
+            if arr:
+                # first item should be attached to current last text item
+                arr[0] = arr[0].strip()
+                # if last text item not exists then create him 
+                # because _after should be added to it
                 if not saw.children:
                     saw.children.append(Item())
-            while (i < cnt) and (len(item[i]) == 1):
-                saw.children[-1].after_append(item[i])
+            # attached 'x..' to last text item
+            while (i < cnt) and (len(arr[i]) == 1):
+                saw.children[-1].after_append(arr[i])
                 i += 1
 
-            if (i < cnt) and (item[i][1] == ' '):
-                saw.children[-1].after_append(item[i].strip())
+            # attached 'x..|.| ' to last text item too
+            if (i < cnt) and (arr[i][1] == ' '):
+                saw.children[-1].after_append(arr[i].strip())
                 i += 1
 
             if i < cnt:
                 need_new = True
                 while i < cnt:
-                    if item[i][0] == ' ':
+                    if arr[i][0] == ' ':
                         need_new = True
                     if need_new:
                         saw.children.append(Item())
                         need_new = False
-                    if item[i][-1] == ' ':
+                    if arr[i][-1] == ' ':
                         need_new = True
-                    saw.children[-1].after_append(item[i].strip())
+                    saw.children[-1].after_append(arr[i].strip())
                     i += 1
+        # if children then were 'x..y' and add '..' to 'x' as after 
+        # else add to _before next text item - y (just <begin string>'..y') 
         elif saw.children:
             saw.children[-1].after(to_before)
             to_before = []
@@ -120,7 +130,10 @@ class Parser:
 
     @classmethod
     def _load_children(cls, saw, data):
+        # to_before - node items for _before of current string item
+        # process first item - always '[...]'
         to_before = cls._process_list(saw, data[0])
+        # each pair: text, [...]
         for i in range(1, len(data) - 1, 2):
             cls._process_string(saw, data[i], to_before)
             to_before = cls._process_list(saw, data[i + 1])
@@ -128,29 +141,13 @@ class Parser:
             saw.children.append(Item().after(to_before))
 
     @classmethod
-    def load(cls, saw: Item, text, process_mods=True):
+    def load(cls, saw, text, process_mods=True):
         saw.children = []
-        #Mod.load_mods()
 
         data = cls.parse(text)
-
         if process_mods:
             data = cls._process_mods(data)
-
         cls._load_children(saw, data)
-
-        """ For filters after
-        if process_mods:
-            ln = len(saw.children)
-            if ln == 1:
-                Mod.get(cls._type, Item(), saw.children[0], Item())
-            elif ln == 2:
-                Mod.get(cls._type, Item(), saw.children[0], saw.children[1])
-            if ln > 2:
-                for i in range(1, ln - 1):
-                    Mod.get(cls._type, saw.children[i - 1], saw.children[i], saw.children[i + 1])
-                Mod.get(cls._type, saw.children[-2], saw.children[-1], Item())
-        """
 
         if cls._child_class:
             for x in saw.children:
