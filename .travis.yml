@@ -3,8 +3,8 @@ repo_token: Al6rGCTqjmwTEKPLgfHQAV3ij8BxpAMxa
 
 language: python
 python:
-  - "3.2"
-#  - "2.7"
+#  - "3.2"
+  - "2.7"
 # command to install dependencies
 #install:
   #- "pip install . --use-mirrors"
