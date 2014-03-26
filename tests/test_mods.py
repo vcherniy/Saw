@@ -42,14 +42,43 @@ class TestMods(unittest.TestCase):
 
     def test_blocks(self):
         # [',', ':', '=', '+', ';', '*', '"', '-', "'", '{', '(', '[', ']', ')', '}', ]
-        text = 'Too long: :smil:e, for-and and -simple=at, (connect af) 12; *test* and "now" {text again }'
+
+        # :x  x:y
+        # +y  x+y
+        # -x  x-y
+        for rule in [':', '+', '-']:
+            text = 'Too long{0} {0}smile t{0}o and {0}{0}simple {0} again {0} ={0}st text '.format(rule)
+            expect = [
+                [[],    '', [rule]],   # Too long{0}
+                [[],    '', [rule]],   # {0}smile t{0}o and {0}{0}simple {0}
+                [[],    '', [rule]],   # again {0}
+                [['='], '', []]        # ={0}st text
+            ]
+            saw = Blocks.load(Item(), text)
+            self.assertEqual(self._form(saw), expect)
+
+        # ( x -> before
+        # [ x -> before
+        for complex in [['(', ')'], ['[', ']']]:
+            text = '{0}text{1} {0}  new {1} {0}{0}two{1}{1} {0} {0} aaa {1} {1} aa{0}bbb ccc{1}ddd'.format(complex[0], complex[1])
+            expect = [
+                [[],    '', [rule]],   # Too long{0}
+                [[],    '', [rule]],   # {0}smile t{0}o and {0}{0}simple {0}
+                [[],    '', [rule]],   # again {0}
+                [['='], '', []]        # ={0}st text
+            ]
+            saw = Blocks.load(Item(), text)
+            #self.assertEqual(self._form(saw), expect)
+
+        # x*y
+        text = 'Text*new bb**cc *new test* aaa**'
         expect = [
-            [[], '', [',']],    # Too long smile. for-and and -simple
-            [[], '', ['(']],    # (
-            [[], '', [')']],     # connect af)
-            [[], '', []]        # 12
+            [[],    '', []],            # ext*new bb**cc
+            [['*'], '', ['*']],         # *new test*
+            [[],    '', ['*', '*']],    # aaa**
         ]
         saw = Blocks.load(Item(), text)
+        print self._form(saw)
         self.assertEqual(self._form(saw), expect)
 
 
