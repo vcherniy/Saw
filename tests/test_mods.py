@@ -1,9 +1,6 @@
 import unittest
-#from saw.parsers.paragraphs import Paragraphs
 from saw.parsers.sentences import Sentences
 from saw.parsers.blocks import Blocks
-#from saw.parsers.words import Words
-
 from saw.parsers import Item
 
 
@@ -26,7 +23,6 @@ class TestMods(unittest.TestCase):
             [[],    '', ['.', '.']]    # Length = 100m..
         ]
         saw = Sentences.load(Item(), text)
-        #print(self._form(saw))
         self.assertEqual(self._form(saw), expect)
 
         text = "Test! ! ft.?. start..end ..before and.  ?!.ending text"
@@ -47,12 +43,33 @@ class TestMods(unittest.TestCase):
         # +y  x+y
         # -x  x-y
         for rule in [':', '+', '-']:
-            text = 'Too long{0} *{0}smile t{0}o and {0}{0}simple {0} again {0} ={0}st text '.format(rule)
+            text = 'Too long{0} new{0}text {0}newer dash.*new'.format(rule)
             expect = [
-                [[],    '', [rule]],   # Too long{0}
-                [['*'], '', [rule]],   # {0}smile t{0}o and {0}{0}simple {0}
-                [[],    '', [rule]],   # again {0}
-                [['='], '', []]        # ={0}st text
+                [[], '', [rule]],  # Too long{0}
+                [[], '', []],      # new{0}text {0}newer dash.*new
+            ]
+            saw = Blocks.load(Item(), text)
+            self.assertEqual(self._form(saw), expect)
+
+            text = 'Too long{0}{0} new{0}{0}text {0}{0}newer'.format(rule)
+            expect = [
+                [[],           '', [rule, rule]],  # Too long{0}{0}
+                [[],           '', [rule, rule]],  # new{0}{0}
+                [[],           '', []],            # text
+                [[rule, rule], '', []]             # {0}{0}newer
+            ]
+            saw = Blocks.load(Item(), text)
+            self.assertEqual(self._form(saw), expect)
+
+            text = 'Too long*{0} new{0}*text *{0}newer {0}*casual +-combo -'.format(rule)
+            expect = [
+                [[],          '', ['*', rule]],  # Too long*{0}
+                [[],          '', [rule, '*']],  # new{0}*
+                [[],          '', []],           # text
+                [['*', rule], '', []],           # *{0}newer
+                [[rule, '*'], '', []],           # {0}*casual
+                [['+', '-'],  '', []],           # +-combo
+                [[],          '', ['-']]         # -
             ]
             saw = Blocks.load(Item(), text)
             self.assertEqual(self._form(saw), expect)

@@ -9,8 +9,7 @@ class Sentences:
 
     @staticmethod
     def blocks(before, string, after):
-        while before and before[-1] in ['-', '+', ':']:
-            string = before.pop().strip() + string
-        if before and (before[-1] in [' -', ' +', ' :']):
-            string = before.pop().strip() + string
+        if len(before) == 1:
+            if before[0] in ['-', '+', ':', ' -', ' +', ' :']:
+                string = before.pop().strip() + string
         return [before, string, after]
