@@ -47,10 +47,10 @@ class TestMods(unittest.TestCase):
         # +y  x+y
         # -x  x-y
         for rule in [':', '+', '-']:
-            text = 'Too long{0} {0}smile t{0}o and {0}{0}simple {0} again {0} ={0}st text '.format(rule)
+            text = 'Too long{0} *{0}smile t{0}o and {0}{0}simple {0} again {0} ={0}st text '.format(rule)
             expect = [
                 [[],    '', [rule]],   # Too long{0}
-                [[],    '', [rule]],   # {0}smile t{0}o and {0}{0}simple {0}
+                [['*'], '', [rule]],   # {0}smile t{0}o and {0}{0}simple {0}
                 [[],    '', [rule]],   # again {0}
                 [['='], '', []]        # ={0}st text
             ]
@@ -71,14 +71,16 @@ class TestMods(unittest.TestCase):
             #self.assertEqual(self._form(saw), expect)
 
         # x*y
-        text = 'Text*new bb**cc *new test* aaa**'
+        text = 'Text*new bb**cc *new test* ***st -*bb *pt-*nn aaa**'
         expect = [
-            [[],    '', []],            # ext*new bb**cc
-            [['*'], '', ['*']],         # *new test*
-            [[],    '', ['*', '*']],    # aaa**
+            [[],              '', []],          # Text*new bb**cc
+            [['*'],           '', ['*']],       # *new test*
+            [['*', '*', '*'], '', []],          # ***st 
+            [['-', '*'],      '', []],          # -*bb
+            [['*'],           '', ['-', '*']],  # *pt-*
+            [[],              '', ['*', '*']]   # nn aaa**
         ]
         saw = Blocks.load(Item(), text)
-        print self._form(saw)
         self.assertEqual(self._form(saw), expect)
 
 
