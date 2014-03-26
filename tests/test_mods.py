@@ -29,13 +29,13 @@ class TestMods(unittest.TestCase):
         #print(self._form(saw))
         self.assertEqual(self._form(saw), expect)
 
-        text = "Test! ! ft.?. start..end ..before and.  .!.ending text"
+        text = "Test! ! ft.?. start..end ..before and.  ?!.ending text"
         expect = [
             [[],         '', ['!']],            # Test!
             [[],         '', ['!']],            # !
             [[],         '', ['.', '?', '.']],  # ft.?.
             [[],         '', ['.']],            # start..end ..before and.
-            [['.', '!'], '', []]                # .!.ending text
+            [['?', '!'], '', []]                # ?!.ending text
         ]
         saw = Sentences.load(Item(), text)
         self.assertEqual(self._form(saw), expect)
