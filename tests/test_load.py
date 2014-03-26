@@ -43,7 +43,7 @@ class TestLoad(unittest.TestCase):
         saw = Sentences.load(Item(), text, False)
         self.assertEqual(self._form(saw), expect)
 
-        text = "Test! ! ft.?. start..end ..before and.  ending text"
+        text = "Test! ! ft.?. start..end ..before and.  ?.ending text"
         expect = [
             [[],         '', ['!']],            # Test!
             [[],         '', ['!']],            # !
@@ -51,7 +51,7 @@ class TestLoad(unittest.TestCase):
             [[],         '', ['.', '.']],       # start..
             [[],         '', []],               # end
             [['.', '.'], '', ['.']],            # ..before and.
-            [[],         '', []]                # ending text
+            [['?', '.'], '', []]                # ?.ending text
         ]
         saw = Sentences.load(Item(), text, False)
         self.assertEqual(self._form(saw), expect)
