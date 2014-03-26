@@ -52,7 +52,7 @@ class Parser:
     def _process_mods(cls, data):
         Mod.init()
 
-        for i in range(0, len(data) - 1, 2):
+        for i in xrange(0, len(data) - 2, 2):
             # pass [[,,], 'text', [,,]]
             tmp = Mod.get(cls._type, data[i: i + 3])
             data[i], data[i + 1], data[i + 2] = tmp[0], tmp[1], tmp[2]
@@ -83,12 +83,12 @@ class Parser:
         #  . , |.,|
         to_before = []
         while arr and (len(arr[-1]) == 1):
-            to_before.append(arr.pop())
+            to_before.insert(0, arr.pop())
 
         if arr:
             # add to to_before element ' | .|..text'
             if arr[-1][0] == ' ' and (len(arr[-1]) == 2):
-                to_before.append(arr.pop().strip())
+                to_before.insert(0, arr.pop().strip())
 
             # still items just for _after -- 'x..y' and 'x ..y' items were excluded 
             i, cnt = 0, len(arr)
@@ -134,7 +134,7 @@ class Parser:
         # process first item - always '[...]'
         to_before = cls._process_list(saw, data[0])
         # each pair: text, [...]
-        for i in range(1, len(data) - 1, 2):
+        for i in xrange(1, len(data) - 1, 2):
             cls._process_string(saw, data[i], to_before)
             to_before = cls._process_list(saw, data[i + 1])
         if to_before:
