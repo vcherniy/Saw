@@ -6,6 +6,4 @@
 class Saw:
     @staticmethod
     def load(text):
-        saw = Item()
-        Paragraphs.load(saw, text)
-        return saw
+        return Paragraphs.load(Item(), text)

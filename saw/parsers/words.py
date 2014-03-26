@@ -11,9 +11,7 @@ class Words(Parser):
 
     @staticmethod
     def _process_string(saw, text):
-        _item = Item()
-        _item.text(text)
-        saw.children.append(_item)
+        saw.children.append(Item().text(text))
 
     @classmethod
     def _load_children(cls, saw, data):

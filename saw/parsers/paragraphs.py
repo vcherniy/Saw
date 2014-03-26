@@ -17,7 +17,5 @@ class Paragraphs(Parser):
             tmp.append("\n")
         # end of string will add \n. We should ignore it.
         tmp.pop()
-        if not tmp:
-            tmp = []
         result.append(tmp)
         return result
