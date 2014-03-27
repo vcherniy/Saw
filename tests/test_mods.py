@@ -43,27 +43,26 @@ class TestMods(unittest.TestCase):
         # +y  x+y
         # -x  x-y
         for rule in [':', '+', '-']:
-            text = 'Too long{0} new{0}text {0}newer dash.*new'.format(rule)
+            text = 'Too long{0} {0}newer dash.*new new{0}text'.format(rule)
             expect = [
                 [[], '', [rule]],  # Too long{0}
-                [[], '', []],      # new{0}text {0}newer dash.*new
+                [[], '', []],      # {0}newer dash.*new new{0}text
             ]
             saw = Blocks.load(Item(), text)
             self.assertEqual(self._form(saw), expect)
 
-            text = 'Too long{0}{0} new{0}{0}text {0}{0}newer'.format(rule)
+            text = 'Too long{0}{0} {0}{0}newer new{0}{0}text '.format(rule)
             expect = [
                 [[],           '', [rule, rule]],  # Too long{0}{0}
-                [[],           '', [rule, rule]],  # new{0}{0}
+                [[rule, rule], '', [rule, rule]],  # {0}{0}newer new{0}{0}
                 [[],           '', []],            # text
-                [[rule, rule], '', []]             # {0}{0}newer
             ]
             saw = Blocks.load(Item(), text)
             self.assertEqual(self._form(saw), expect)
 
-            text = 'Too long*{0} new{0}*text *{0}newer {0}*casual +-combo -'.format(rule)
+            text = 'Too long *{0} new{0}*text *{0}newer {0}*casual +-combo -'.format(rule)
             expect = [
-                [[],          '', ['*', rule]],  # Too long*{0}
+                [[],          '', ['*', rule]],  # Too long *{0}
                 [[],          '', [rule, '*']],  # new{0}*
                 [[],          '', []],           # text
                 [['*', rule], '', []],           # *{0}newer
@@ -76,13 +75,36 @@ class TestMods(unittest.TestCase):
 
         # ( x -> before
         # [ x -> before
-        for complex in [['(', ')'], ['[', ']']]:
-            text = '{0}text{1} {0}  new {1} {0}{0}two{1}{1} {0} {0} aaa {1} {1} aa{0}bbb ccc{1}ddd'.format(complex[0], complex[1])
+        for st, fn in [['(', ')'], ['[', ']']]:
+            text = '{0}text{1} {0}  new {1} {0}{0}two{1}{1} {0} {0} aaa {1} {1}'.format(st, fn)
             expect = [
-                [[],    '', [rule]],   # Too long{0}
-                [[],    '', [rule]],   # {0}smile t{0}o and {0}{0}simple {0}
-                [[],    '', [rule]],   # again {0}
-                [['='], '', []]        # ={0}st text
+                [[st],     '', [fn]],      # {0}text{1}
+                [[st],     '', [fn]],      # {0}  new {1}
+                [[st, st], '', [fn, fn]],  # {0}{0}two{1}{1}
+                [[st, st], '', [fn, fn]],  # {0} {0} aaa {1} {1}
+            ]
+            saw = Blocks.load(Item(), text)
+            print self._form(saw)
+            self.assertEqual(self._form(saw), expect)
+
+            text = 'aa*{0}bbb ccc{1}ddd {1}{0}aaa cc*{1}{0} htc{1}'.format(st, fn)
+            expect = [
+                [[],   '', ['*']],     # aa*
+                [[st], '', [fn]],      # {0}bbb ccc{1}
+                [[],   '', [fn]],      # ddd {1}
+                [[st], '', ['*', fn]], # {0}aaa cc*{1}
+                [[st], '', [fn]],      # {0} htc{1}
+            ]
+            saw = Blocks.load(Item(), text)
+            #self.assertEqual(self._form(saw), expect)
+
+            text = '{0} aa{0} fdf{1}fdf{1}  {0} *kt'.format(st, fn)
+            expect = [
+                [[st],  '', []],    # {0} aa
+                [[st],  '', [fn]],  # {0} fdf{1}
+                [[],    '', [fn]],  # fdf{1}
+                [[st],  '', []],    # {0} 
+                [['*'], '', []],    # *kt
             ]
             saw = Blocks.load(Item(), text)
             #self.assertEqual(self._form(saw), expect)
