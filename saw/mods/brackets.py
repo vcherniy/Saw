@@ -11,19 +11,12 @@ class Brackets:
         for i in xrange(0, len(after)):
             if after[i].strip() in [']', ')']:
                 after[i] = after[i].strip() + ' '
-
-        for i in xrange(0, len(before)):
-            if before[i].strip() in ['[', '(']:
-                before[i] = ' ' + before[i].strip()
-
-        
-
+                
         #for i in xrange(len(before) - 1, -1, -1):
         #    if before[i].strip() in ['[', '(']:
         #        before[i] = before[i].strip()
         #    elif len(before[i]) > 1:
         #        break
-        print [before, string, after]
 
         return [before, string, after]
         """
