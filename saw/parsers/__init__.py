@@ -94,7 +94,8 @@ class Parser:
             i, cnt = 0, len(arr)
             if arr:
                 # first item should be attached to current last text item
-                arr[0] = arr[0].strip()
+                if arr[0][0] == ' ':
+                    arr[0] = arr[0][1:]
                 # if last text item not exists then create him 
                 # because _after should be added to it
                 if not saw.children:
