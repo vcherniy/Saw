@@ -17,3 +17,7 @@ class Words(Parser):
     def _load_children(cls, saw, data):
         for i in range(0, len(data), 1):
             cls._process_string(saw, data[i])
+
+    @staticmethod
+    def _convert(data):
+        return data

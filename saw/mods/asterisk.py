@@ -4,10 +4,10 @@ class Asterisk:
         if before:
             join = True
             for item in before:
-                if item != '*':
+                if not(item.symbol == '*' and item.none()):
                     join = False
                     break
             if join:
-                string = ''.join(before) + string
+                string = ''.join((x.symbol for x in before)) + string
                 before = []
         return [before, string, after]
