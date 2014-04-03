@@ -17,6 +17,10 @@ class Item:
         self._before = _before
         return self
 
+    def before_append(self, item):
+        self._before.append(item)
+        return self
+
     def after(self, _after):
         self._after = _after
         return self
