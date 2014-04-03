@@ -146,7 +146,6 @@ class Parser:
         saw.children = []
 
         data = cls.parse(text)
-        cls._convert(data)
         if process_mods:
             data = cls._process_mods(data)
         cls._load_children(saw, data)
@@ -156,12 +155,3 @@ class Parser:
                 cls._child_class.load(x, x._text, process_mods)
                 x._text = ''
         return saw
-
-    @staticmethod
-    def _convert(data):
-        for i in xrange(0, len(data), 2):
-            for j in xrange(0, len(data[i])):
-                data[i][j] = Node(data[i][j])
-
-class Node(str):
-    include_to = False
