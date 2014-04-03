@@ -9,6 +9,10 @@ class Words(Parser):
     def parse(text):
         return [x.strip() for x in text.split(' ') if x != '']
 
+    @classmethod
+    def _process_mods(cls, data):
+        return data
+
     @staticmethod
     def _process_string(saw, text):
         saw.children.append(Item().text(text))

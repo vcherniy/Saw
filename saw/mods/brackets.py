@@ -1,15 +1,22 @@
 class Brackets:
-    @classmethod
-    def sblocks(cls, before, string, after):
+    @staticmethod
+    def blocks(before, string, after):
         # just one ( or [ in before
         # just one ] or ) in after
         # ( or [ on begin of before
         # ] or ) on end of after
         # no ( or [ on after
         # no ) or ] on before
-        before = cls._process(before)
-        after = cls._process(after)
-        print [before, string, after]
+
+        for i in xrange(0, len(after)):
+            if after[i].strip() in [']', ')']:
+                after[i] = after[i].strip() + ' '
+                
+        #for i in xrange(len(before) - 1, -1, -1):
+        #    if before[i].strip() in ['[', '(']:
+        #        before[i] = before[i].strip()
+        #    elif len(before[i]) > 1:
+        #        break
 
         return [before, string, after]
         """
@@ -21,15 +28,3 @@ class Brackets:
 
         while before and before[-1] in ['']
         return [before, string, after]"""
-
-    @staticmethod
-    def _process(items):
-        _len = len(items)
-
-        for i in xrange(0, _len):
-            if items[i].strip() in [']', ')']:
-                items[i] = items[i].strip() + ' '
-                
-        for i in xrange(-1, -1 * _len, -1):
-            items[i]
-        return items

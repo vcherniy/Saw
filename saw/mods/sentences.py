@@ -1,16 +1,16 @@
 class Sentences:
     @staticmethod
     def sentences(before, string, after):
-        while before and (before[-1].symbol == '.') and before[-1].none():
-            string = before.pop().symbol + string
-        if before and (before[-1].symbol == '.') and before[-1].left():
-            string = before.pop().symbol + string
+        while before and (before[-1] == '.'):
+            string = before.pop().strip() + string
+        if before and (before[-1] == ' .'):
+            string = before.pop().strip() + string
         return [before, string, after]
 
     @staticmethod
     def blocks(before, string, after):
         _ln = len(before)
-        if _ln and (before[-1].symbol in ['-', '+', ':'])\
-            and (before[-1].left() or (_ln == 1 and before[-1].none())):
-            string = before.pop().symbol + string
+        if (_ln == 1 and before[0] in ['-', '+', ':', ' -', ' +', ' :'])\
+            or (_ln > 1 and before[-1] in [' -', ' +', ' :']):
+            string = before.pop().strip() + string
         return [before, string, after]

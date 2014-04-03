@@ -82,44 +82,45 @@ class Parser:
 
         #  . , |.,|
         to_before = []
-        while arr and arr[-1].none():
-            to_before.insert(0, arr.pop().symbol)
+        while arr and (len(arr[-1]) == 1):
+            to_before.insert(0, arr.pop())
 
         if arr:
             # add to to_before element ' | .|..text'
-            if arr[-1].left():
-                to_before.insert(0, arr.pop().symbol)
+            if arr[-1][0] == ' ' and (len(arr[-1]) == 2):
+                to_before.insert(0, arr.pop().strip())
 
             # still items just for _after -- 'x..y' and 'x ..y' items were excluded 
             i, cnt = 0, len(arr)
             if arr:
                 # first item should be attached to current last text item
-                arr[0].left(False)
+                if arr[0][0] == ' ':
+                    arr[0] = arr[0][1:]
                 # if last text item not exists then create him 
                 # because _after should be added to it
                 if not saw.children:
                     saw.children.append(Item())
             # attached 'x..' to last text item
-            while (i < cnt) and arr[i].none():
-                saw.children[-1].after_append(arr[i].symbol)
+            while (i < cnt) and (len(arr[i]) == 1):
+                saw.children[-1].after_append(arr[i])
                 i += 1
 
             # attached 'x..|.| ' to last text item too
-            if (i < cnt) and arr[i].right():
-                saw.children[-1].after_append(arr[i].symbol)
+            if (i < cnt) and (arr[i][1] == ' '):
+                saw.children[-1].after_append(arr[i].strip())
                 i += 1
 
             if i < cnt:
                 need_new = True
                 while i < cnt:
-                    if arr[i].left() or arr[i].both():
+                    if arr[i][0] == ' ':
                         need_new = True
                     if need_new:
                         saw.children.append(Item())
                         need_new = False
-                    if arr[i].right() or arr[i].both():
+                    if arr[i][-1] == ' ':
                         need_new = True
-                    saw.children[-1].after_append(arr[i].symbol)
+                    saw.children[-1].after_append(arr[i].strip())
                     i += 1
         # if children then were 'x..y' and add '..' to 'x' as after 
         # else add to _before next text item - y (just <begin string>'..y') 
@@ -162,49 +163,5 @@ class Parser:
             for j in xrange(0, len(data[i])):
                 data[i][j] = Node(data[i][j])
 
-class Node:
-    _left = False
-    _right = False
+class Node(str):
     include_to = False
-    symbol = ''
-
-    def __init__(self, source):
-        if source[0] == ' ':
-            self._left = True
-        if source[-1] == ' ':
-            self._right = True
-        self.symbol = source
-        if self._left or self._right:
-            self.symbol = source.strip()
-
-    def left(self, status = None):
-        if status == None:
-            return self._left and not self._right
-        elif status in [False, True]:
-            self._left = status
-            if status:
-                self._right = False
-            return self
-
-    def right(self, status = None):
-        if status == None:
-            return self._right and not self._left
-        elif status in [False, True]:
-            self._right = status
-            if status:
-                self._left = False
-            return self
-
-    def both(self, status = None):
-        if status == None:
-            return self._left and self._right
-        elif status in [False, True]:
-            self._right = status
-            self._left = status
-            return self
-
-    def none(self):
-        return not(self._left or self._right)
-
-    def __repr__(self):
-        return repr([self._left, self.symbol, self._right])
