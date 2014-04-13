@@ -42,10 +42,10 @@ class Mod:
         cls.loaded = True
 
     @classmethod
-    def get(cls, name, data):
+    def get(cls, name, _before, _text, _after):
         if not(name in cls._mods):
             raise Exception("Mods not found!")
 
         for mod in cls._mods[name]:
-            data = mod(*data)
-        return data
+            _before, _text, _after = mod(_before, _text, _after)
+        return _before, _text, _after

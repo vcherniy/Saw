@@ -51,26 +51,25 @@ class Parser:
     def _process_mods(cls, data):
         Mod.init()
 
-        for i in xrange(0, len(data) - 2, 2):
-            # pass [[,,], 'text', [,,]]
-            data[i], data[i + 1], data[i + 2] = Mod.get(cls._type, data[i: i + 3])
+        if data:
+            result = []
+            last_node = data[0]
 
-        # correct string if list is empty
-        _max = len(data) - 3
-        _from, _to = 2, 1
-        while _from <= _max:
-            if not data[_from]:
-                data[_to] += data[_from + 1]
-                data[_from + 1] = ''
-            else:
-                _to = _from + 1
-            _from += 2
-        return data
+            for i in xrange(0, len(data) - 2, 2):
+                tmp = Mod.get(cls._type, last_node, data[i+1], data[i+2])
+                # if _before is empty then append _text to last result node - always text node.
+                # if result is empty then leave as is and append to result
+                if not tmp[0] and result:
+                    result[-1] += tmp[1]
+                else:
+                    result.append(tmp[0])
+                    result.append(tmp[1])
+                last_node = tmp[2]
+            result.append(last_node)
+        return result
 
     @classmethod
     def _process_string(cls, saw, text, to_before):
-        if not text:
-            return
         saw.children.append(Item().before(to_before).text(text))
 
     @classmethod
