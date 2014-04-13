@@ -53,8 +53,7 @@ class Parser:
 
         for i in xrange(0, len(data) - 2, 2):
             # pass [[,,], 'text', [,,]]
-            tmp = Mod.get(cls._type, data[i: i + 3])
-            data[i], data[i + 1], data[i + 2] = tmp[0], tmp[1], tmp[2]
+            data[i], data[i + 1], data[i + 2] = Mod.get(cls._type, data[i: i + 3])
 
         # correct string if list is empty
         _max = len(data) - 3

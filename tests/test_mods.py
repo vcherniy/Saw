@@ -112,6 +112,15 @@ class TestMods(unittest.TestCase):
             saw = Blocks.load(Item(), text)
             self.assertEqual(self._form(saw), expect)
 
+            text = '{1}aabc{0}'.format(st, fn)
+            expect = [
+                [[],   '', [fn]],  # {1}
+                [[],   '', []],    # aabc
+                [[st], '', []],    # {0}
+            ]
+            saw = Blocks.load(Item(), text)
+            #self.assertEqual(self._form(saw), expect)
+
         # x*y
         text = 'Text*new bb**cc *new test* ***st -*bb *pt-*nn aaa**'
         expect = [
