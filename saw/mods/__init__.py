@@ -38,7 +38,7 @@ class Mod:
         for mod_name in result:
             for attr_name, attr in inspect.getmembers(result[mod_name]):
                 if attr_name.lower() in cls._mods:
-                    cls._mods[ attr_name.lower() ].append(attr)
+                    cls._mods[attr_name.lower()].append(attr)
         cls.loaded = True
 
     @classmethod

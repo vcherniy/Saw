@@ -85,13 +85,8 @@ class Parser:
             to_before.insert(0, arr.pop())
 
         if arr:
-            _ln_last = len(arr[-1])
-            # add to to_before element ' | .|..text'
-            if _ln_last == 2 and arr[-1][0] == ' ':
-                to_before.insert(0, arr.pop().strip())
-
-            # add to to_before element ' |  .|..text'
-            if _ln_last == 3 and arr[-1][:2] == '  ':
+            # add to to_before element ' | .|..text' and ' |  .|..text'
+            if not arr[-1][-1] == ' ':
                 to_before.insert(0, arr.pop().strip())
 
             # still items just for _after -- 'x..y' and 'x ..y' items were excluded 
@@ -100,33 +95,29 @@ class Parser:
                 # first item should be attached to current last text item
                 if arr[0][0] == ' ':
                     arr[0] = arr[0][1:]
-                # if last text item not exists then create him 
-                # because _after should be added to it
                 need_new = False
                 to_before_mode = False
+                # if last text item not exists then create him
+                # because _after should be added to it
                 if not saw.children:
                     need_new = True
 
                 while i < cnt:
                     if arr[i][0] == ' ':
                         need_new = True
-
                     to_before_mode = (arr[i][:2] == '  ')
-
                     if need_new:
                         saw.children.append(Item())
                         need_new = False
-
                     if arr[i][-1] == ' ':
                         need_new = True
-
                     if to_before_mode:
                         saw.children[-1].before_append(arr[i].strip())
                     else:
                         saw.children[-1].after_append(arr[i].strip())
                     i += 1
-        # if children then were 'x..y' and add '..' to 'x' as after 
-        # else add to _before next text item - y (just <begin string>'..y') 
+        # if children then were 'x..y' then should add '..' to 'x' as after
+        # else if begin of string then children is empty and add '..' to _before
         elif saw.children:
             saw.children[-1].after(to_before)
             to_before = []
@@ -154,7 +145,7 @@ class Parser:
         cls._load_children(saw, data)
 
         if cls._child_class:
-            for x in saw.children:
-                cls._child_class.load(x, x._text, process_mods)
-                x._text = ''
+            for child in saw.children:
+                cls._child_class.load(child, child._text, process_mods)
+                child._text = ''
         return saw

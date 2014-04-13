@@ -11,6 +11,6 @@ class Sentences:
     def blocks(before, string, after):
         _ln = len(before)
         if (_ln == 1 and before[0] in ['-', '+', ':', ' -', ' +', ' :'])\
-            or (_ln > 1 and before[-1] in [' -', ' +', ' :']):
+                or (_ln > 1 and before[-1] in [' -', ' +', ' :']):
             string = before.pop().strip() + string
         return [before, string, after]
