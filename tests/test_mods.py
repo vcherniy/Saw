@@ -78,36 +78,36 @@ class TestMods(unittest.TestCase):
         for st, fn in [['(', ')'], ['[', ']']]:
             text = '{0}text{1} {0}  new {1} {0}{0}two{1}{1} {0} {0} aaa {1} {1}'.format(st, fn)
             expect = [
-                [[st], '', [fn]], # {0}text{1}
-                [[st], '', [fn]], # {0}  new {1}
-                [[st], '', []],   # {0}
-                [[st], '', [fn]], # {0}two{1}
-                [[],   '', [fn]], # {1}
-                [[st], '', []],   # {0}
-                [[st], '', [fn]], # {0} aaa {1} 
-                [[],   '', [fn]], # {1}
+                [[st], '', [fn]],  # {0}text{1}
+                [[st], '', [fn]],  # {0}  new {1}
+                [[st], '', []],    # {0}
+                [[st], '', [fn]],  # {0}two{1}
+                [[],   '', [fn]],  # {1}
+                [[st], '', []],    # {0}
+                [[st], '', [fn]],  # {0} aaa {1}
+                [[],   '', [fn]],  # {1}
             ]
             saw = Blocks.load(Item(), text)
             self.assertEqual(self._form(saw), expect)
 
             text = 'aa*{0}bbb ccc{1}ddd {1}{0}aaa cc *{1}{0} htc{1}'.format(st, fn)
             expect = [
-                [[],   '', ['*']],     # aa*
-                [[st], '', [fn]],      # {0}bbb ccc{1}
-                [[],   '', [fn]],      # ddd {1}
-                [[st], '', ['*', fn]], # {0}aaa cc *{1}
-                [[st], '', [fn]],      # {0} htc{1}
+                [[],   '', ['*']],      # aa*
+                [[st], '', [fn]],       # {0}bbb ccc{1}
+                [[],   '', [fn]],       # ddd {1}
+                [[st], '', ['*', fn]],  # {0}aaa cc *{1}
+                [[st], '', [fn]],       # {0} htc{1}
             ]
             saw = Blocks.load(Item(), text)
             self.assertEqual(self._form(saw), expect)
 
             text = '{0} aa{0} fdf - {1}fdf{1}  {0} * kt'.format(st, fn)
             expect = [
-                [[st], '', []],        # {0} aa
-                [[st], '', ['-', fn]], # {0} fdf - {1}
-                [[],   '', [fn]],      # fdf{1}
-                [[st], '', ['*']],     # {0}*
-                [[],   '', []],        # kt
+                [[st], '', []],         # {0} aa
+                [[st], '', ['-', fn]],  # {0} fdf - {1}
+                [[],   '', [fn]],       # fdf{1}
+                [[st], '', ['*']],      # {0}*
+                [[],   '', []],         # kt
             ]
             saw = Blocks.load(Item(), text)
             self.assertEqual(self._form(saw), expect)

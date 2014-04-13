@@ -18,11 +18,10 @@ class Parser:
 
         for m in re.finditer(cls._format, text):
             curr, _next = m.start(), m.end()
-
             # append string and nodes what were before it
             if prev < curr:
                 node = text[prev:curr].strip()
-                if node != '':
+                if node:
                     result.append(old_items)
                     result.append(node)
                     old_items = []
@@ -159,11 +158,3 @@ class Parser:
                 cls._child_class.load(x, x._text, process_mods)
                 x._text = ''
         return saw
-
-    @staticmethod
-    def to_before(item):
-        return getattr(item, 'to_before', False) == True
-
-    @staticmethod
-    def to_after(item):
-        return getattr(item, 'to_after', False) == True

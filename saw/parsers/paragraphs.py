@@ -5,8 +5,8 @@ class Paragraphs(Parser):
     _type = 'paragraphs'
     _child_class = Sentences
 
-    @staticmethod
-    def parse(text):
+    @classmethod
+    def parse(cls, text):
         items = text.split("\n")
         result, tmp = [], []
         for item in items:
