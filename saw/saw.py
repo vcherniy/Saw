@@ -1,6 +1,5 @@
-#from item import Item
-#from items import Items
-#from saw.parsers.paragraphs import Paragraphs, Parser
+from item import Item
+from parsers.paragraphs import Paragraphs
 
 
 class Saw:

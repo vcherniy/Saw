@@ -14,6 +14,7 @@ class Filter:
 
     @classmethod
     def exists(cls, name):
+        cls.init()
         return name in cls._filters
 
     @classmethod

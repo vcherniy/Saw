@@ -3,8 +3,7 @@ from filters import Filter
 
 
 class Item:
-    # has attribute with direch children and name as children type
-    # example: .words
+    # get attributes of String class
     _str_dir = dir('')
 
     def __init__(self):
@@ -12,6 +11,9 @@ class Item:
         self._after = []
         self._text = ''
         self.children = None
+
+    def set_children_alias(self, name):
+        setattr(self, name, self.children)
 
     def before(self, _before):
         self._before = _before
@@ -38,12 +40,8 @@ class Item:
         return self
 
     def __repr__(self):
-        result = self.__dict__.copy()
-        result.pop("children", None)
-        if not(self._before): result.pop('_before', None)
-        if not(self._after): result.pop('_after', None)
-        if not(self._text):  result.pop('_text', None)
-        return result.__repr__()
+        return dict((x, y) for x, y in self.__dict__.copy().iteritems()
+                    if y and not (x == 'children')).__repr__()
 
     def __str__(self):
         return "%s%s%s%s" % (''.join(self._before), str(self.children or ''), self._text, ''.join(self._after))
@@ -55,12 +53,13 @@ class Item:
         name = str(name)
 
         if name in self._str_dir:
+            # get str hash of this object and apply attribute to this
             return getattr(self.__str__(), name)
 
         if Filter.exists(name):
             return Filter.get(name, self)
 
         result = Items()
-        if ('children' in self.__dict__) and self.children:
-            result = getattr(self.children, name, [])
+        if self.children:
+            result = getattr(self.children, name)
         return result
