@@ -10,7 +10,7 @@ class Mod:
         'blocks': [],
         'words': []
     }
-    loaded = False
+    _loaded = False
 
     @staticmethod
     def load_modules(path, package_name):
@@ -31,7 +31,7 @@ class Mod:
 
     @classmethod
     def init(cls):
-        if cls.loaded:
+        if cls._loaded:
             return
         result = cls.load_modules(__file__, 'saw.mods')
 
@@ -39,7 +39,7 @@ class Mod:
             for attr_name, attr in inspect.getmembers(result[mod_name]):
                 if attr_name.lower() in cls._mods:
                     cls._mods[attr_name.lower()].append(attr)
-        cls.loaded = True
+        cls._loaded = True
 
     @classmethod
     def get(cls, name, _before, _text, _after):

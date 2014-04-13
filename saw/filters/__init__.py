@@ -3,10 +3,14 @@ from saw.mods import Mod
 
 class Filter:
     _filters = dict()
+    _loaded = False
 
     @classmethod
-    def load_filters(cls):
+    def init(cls):
+        if cls._loaded:
+            return
         cls._filters = Mod.load_modules(__file__, 'saw.filters')
+        cls._loaded = True
 
     @classmethod
     def exists(cls, name):
@@ -14,7 +18,7 @@ class Filter:
 
     @classmethod
     def get(cls, filter_name, item):
-        if not(cls.exists(filter_name)):
+        if not cls.exists(filter_name):
             raise Exception("Filter not found!")
         # get class name of input variable and call filter's method with its name.
         func_name = item.__class__.__name__.lower()
@@ -25,7 +29,3 @@ class Filter:
         def callback(*args, **kw):
             return getattr(filter_class(), func_name)(item, *args, **kw)
         return callback
-
-
-if __name__ == '__main__':
-    Filter.load_filters()

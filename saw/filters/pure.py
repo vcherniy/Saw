@@ -3,6 +3,7 @@ class Pure:
     def item(item):
         new_item = item.__class__()
         new_item.__dict__ = item.__dict__.copy()
+        new_item.before([])
         new_item.after([])
         return new_item
 
