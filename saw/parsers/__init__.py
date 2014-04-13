@@ -1,4 +1,4 @@
-#from saw.items import Items
+from saw.items import Items
 from saw.item import Item
 import re
 from saw.mods import Mod
@@ -135,7 +135,7 @@ class Parser:
 
     @classmethod
     def load(cls, saw, text, process_mods=True):
-        saw.children = []
+        saw.children = Items()
 
         data = cls.parse(text)
         if process_mods:
@@ -146,4 +146,5 @@ class Parser:
             for child in saw.children:
                 cls._child_class.load(child, child._text, process_mods)
                 child._text = ''
+        saw.set_children_alias(cls._type)
         return saw
