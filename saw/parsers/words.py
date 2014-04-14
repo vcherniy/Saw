@@ -1,5 +1,4 @@
-from saw.parsers import Parser
-from saw.parsers import Item
+from saw.parsers import Parser, Node
 
 
 class Words(Parser):
@@ -15,7 +14,7 @@ class Words(Parser):
 
     @classmethod
     def _process_string(cls, saw, text, to_before):
-        saw.children.append(Item().text(text))
+        saw.append(Node('').text(text))
 
     @classmethod
     def _load_children(cls, saw, data):

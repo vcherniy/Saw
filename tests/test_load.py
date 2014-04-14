@@ -5,8 +5,6 @@ from saw.parsers.words import Words
 from saw.parsers.sentences import Sentences
 from saw.parsers.paragraphs import Paragraphs
 
-from saw.parsers import Item
-
 
 class TestLoad(unittest.TestCase):
     def setUp(self):
@@ -14,7 +12,7 @@ class TestLoad(unittest.TestCase):
 
     @staticmethod
     def _form(iem):
-        return [[item._before, item._text, item._after] for item in iem.children]
+        return [[item._before, item._text, item._after] for item in iem]
 
     def test_paragraphs(self):
         text = "Hi. Mine. \n These items:\n- First item,\n- Second item,   \n - Third item  .\n\nEnded\n"
@@ -26,7 +24,7 @@ class TestLoad(unittest.TestCase):
             [[], '', ["\n", "\n"]],  # - Third item  .\n\n
             [[], '', ["\n"]]         # Ended\n
         ]
-        saw = Paragraphs.load(Item(), text, False)
+        saw = Paragraphs.load(text)
         self.assertEqual(self._form(saw), expect)
 
     def test_sentences(self):
@@ -40,7 +38,7 @@ class TestLoad(unittest.TestCase):
             [[],    '', ['.']],        # .
             [[],    '', ['.', '.']]    # Length = 100m..
         ]
-        saw = Sentences.load(Item(), text, False)
+        saw = Sentences.load(text)
         self.assertEqual(self._form(saw), expect)
 
         text = "Test! ! ft.?. start..end ..before and.  ?.ending text"
@@ -53,7 +51,7 @@ class TestLoad(unittest.TestCase):
             [['.', '.'], '', ['.']],            # ..before and.
             [['?', '.'], '', []]                # ?.ending text
         ]
-        saw = Sentences.load(Item(), text, False)
+        saw = Sentences.load(text)
         self.assertEqual(self._form(saw), expect)
 
     def test_blocks(self):
@@ -67,7 +65,7 @@ class TestLoad(unittest.TestCase):
                 [[],     '', []],       # another. comb!  of
                 [[rule], '', []]        # {0}spaces
             ]
-            saw = Blocks.load(Item(), text, False)
+            saw = Blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = "{0}This example{0}{0}   with. {0},{0} another {0}.{0} spaces{0}".format(rule)
@@ -78,7 +76,7 @@ class TestLoad(unittest.TestCase):
                 [[rule], '', [rule]],               # {0}.{0}
                 [[],     '', [rule]],               # spaces{0}
             ]
-            saw = Blocks.load(Item(), text, False)
+            saw = Blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = "Text {0}{0}no{0}br to t{0}{0}mobile".format(rule)
@@ -88,7 +86,7 @@ class TestLoad(unittest.TestCase):
                 [[],            '', [rule, rule]],  # br to t{0}{0}
                 [[],            '', []]             # mobile
             ]
-            saw = Blocks.load(Item(), text, False)
+            saw = Blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = "{0}{0} {0}This example{0}{0} spaces{0} {0}{0}".format(rule)
@@ -98,7 +96,7 @@ class TestLoad(unittest.TestCase):
                 [[],     '', [rule]],        # spaces{0}
                 [[],     '', [rule, rule]],  # {0}{0}
             ]
-            saw = Blocks.load(Item(), text, False)
+            saw = Blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
     def test_words(self):
@@ -112,7 +110,7 @@ class TestLoad(unittest.TestCase):
             [[], 'and:',    []],
             [[], '-,end',   []]
         ]
-        saw = Words.load(Item(), text, False)
+        saw = Words.load(text)
         self.assertEqual(self._form(saw), expect)
 
 

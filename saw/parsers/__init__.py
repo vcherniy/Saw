@@ -1,5 +1,4 @@
-from saw.items import Items
-from saw.item import Item
+from saw.node import Node
 import re
 from saw.mods import Mod
 
@@ -8,6 +7,8 @@ class Parser:
     _type = ''
     _format = ''
     _child_class = None
+
+    process_mods=True
 
     @classmethod
     def parse(cls, text):
@@ -45,10 +46,8 @@ class Parser:
                 result.append([])
         return result
 
-    # =========== Load ==============
-
     @classmethod
-    def _process_mods(cls, data):
+    def process_mods(cls, data):
         Mod.init()
 
         if data:
@@ -68,9 +67,16 @@ class Parser:
             result.append(last_node)
         return result
 
+    # =========== Load ==============
+
     @classmethod
-    def _process_string(cls, saw, text, to_before):
-        saw.children.append(Item().before(to_before).text(text))
+    def _append(cls, saw, text='', to_before=[], to_after=[]):
+        if cls._child_class and text:
+            node = cls._child_class.load(text)
+            text = ''
+        else:
+            node = Node()
+        saw.append(node.text(text).before(to_before).after(to_after))
 
     @classmethod
     def _process_list(cls, saw, arr):
@@ -97,7 +103,7 @@ class Parser:
                 to_before_mode = False
                 # if last text item not exists then create him
                 # because _after should be added to it
-                if not saw.children:
+                if not saw:
                     need_new = True
 
                 while i < cnt:
@@ -105,19 +111,19 @@ class Parser:
                         need_new = True
                     to_before_mode = (arr[i][:2] == '  ')
                     if need_new:
-                        saw.children.append(Item())
+                        cls._append(saw)
                         need_new = False
                     if arr[i][-1] == ' ':
                         need_new = True
                     if to_before_mode:
-                        saw.children[-1].before_append(arr[i].strip())
+                        saw[-1].before(arr[i].strip(), True)
                     else:
-                        saw.children[-1].after_append(arr[i].strip())
+                        saw[-1].after(arr[i].strip(), True)
                     i += 1
         # if children then were 'x..y' then should add '..' to 'x' as after
         # else if begin of string then children is empty and add '..' to _before
-        elif saw.children:
-            saw.children[-1].after(to_before)
+        elif saw:
+            saw[-1].after(to_before)
             to_before = []
         return to_before
 
@@ -128,23 +134,17 @@ class Parser:
         to_before = cls._process_list(saw, data[0])
         # each pair: text, [...]
         for i in xrange(1, len(data) - 1, 2):
-            cls._process_string(saw, data[i], to_before)
+            cls._append(saw, data[i], to_before)
             to_before = cls._process_list(saw, data[i + 1])
         if to_before:
-            saw.children.append(Item().after(to_before))
+            cls._append(saw, '', [], to_before)
 
     @classmethod
-    def load(cls, saw, text, process_mods=True):
-        saw.children = Items()
+    def load(cls, text):
+        saw = Node().type(cls._type)
 
         data = cls.parse(text)
-        if process_mods:
-            data = cls._process_mods(data)
+        if cls.process_mods:
+            data = cls.process_mods(data)
         cls._load_children(saw, data)
-
-        if cls._child_class:
-            for child in saw.children:
-                cls._child_class.load(child, child._text, process_mods)
-                child._text = ''
-        saw.set_children_alias(cls._type)
         return saw
