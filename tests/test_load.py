@@ -5,9 +5,12 @@ from saw.parsers.words import Words
 from saw.parsers.sentences import Sentences
 from saw.parsers.paragraphs import Paragraphs
 
+from saw.parsers import Parser
+
 
 class TestLoad(unittest.TestCase):
     def setUp(self):
+        Parser.process_mods = False
         pass
 
     @staticmethod

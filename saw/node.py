@@ -66,7 +66,7 @@ class Node(list):
             return Filter.get(name, self)
 
         result = Node()
-        if not self.empty():
+        if not self:
             for item in self:
                 result.extend(getattr(item, name))
         return result

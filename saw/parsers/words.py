@@ -9,7 +9,7 @@ class Words(Parser):
         return [x.strip() for x in text.split(' ') if x != '']
 
     @classmethod
-    def _process_mods(cls, data):
+    def process_mods(cls, data):
         return data
 
     @classmethod

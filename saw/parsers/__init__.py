@@ -70,13 +70,18 @@ class Parser:
     # =========== Load ==============
 
     @classmethod
-    def _append(cls, saw, text='', to_before=[], to_after=[]):
-        if cls._child_class and text:
-            node = cls._child_class.load(text)
-            text = ''
+    def _append(cls, saw, text = ''):
+        if text:
+            if cls._child_class:
+                node = cls._child_class.load(text)
+            else:
+                node = Node().text(text)
         else:
             node = Node()
-        saw.append(node.text(text).before(to_before).after(to_after))
+            if cls._child_class:
+                node.type(cls._child_class._type)
+        saw.append(node)
+        return saw[-1]
 
     @classmethod
     def _process_list(cls, saw, arr):
@@ -99,12 +104,10 @@ class Parser:
                 # first item should be attached to current last text item
                 if arr[0][0] == ' ':
                     arr[0] = arr[0][1:]
-                need_new = False
+                # if Node empty then append item to him
+                # because we should set _after for last item of Node
+                need_new = not saw
                 to_before_mode = False
-                # if last text item not exists then create him
-                # because _after should be added to it
-                if not saw:
-                    need_new = True
 
                 while i < cnt:
                     if arr[i][0] == ' ':
@@ -120,8 +123,8 @@ class Parser:
                     else:
                         saw[-1].after(arr[i].strip(), True)
                     i += 1
-        # if children then were 'x..y' then should add '..' to 'x' as after
-        # else if begin of string then children is empty and add '..' to _before
+        # there was 'x..y', because we must set ['.', '.'] as _after of last item of Node
+        # if Node is empty then there was begin of string then leave _before for next Node's item
         elif saw:
             saw[-1].after(to_before)
             to_before = []
@@ -134,10 +137,10 @@ class Parser:
         to_before = cls._process_list(saw, data[0])
         # each pair: text, [...]
         for i in xrange(1, len(data) - 1, 2):
-            cls._append(saw, data[i], to_before)
+            cls._append(saw, data[i]).before(to_before)
             to_before = cls._process_list(saw, data[i + 1])
         if to_before:
-            cls._append(saw, '', [], to_before)
+            cls._append(saw).after(to_before)
 
     @classmethod
     def load(cls, text):
