@@ -1,19 +1,20 @@
 class Brackets:
     @classmethod
-    def blocks(cls, before, string, after):
+    def blocks(cls, before, string, after, first):
         # just one ( or [ in before
         # just one ] or ) in after
         # ( or [ on begin of before
         # ] or ) on end of after
         # no ( or [ on after
         # no ) or ] on before
-        cls._process(before)
-        cls._process(after)
+        if first:
+            cls._process(before, False)
+        cls._process(after, True)
         
         return [before, string, after]
 
     @staticmethod
-    def _process(items):
+    def _process(items, call_first_item):
         if items:
             for i in xrange(0, len(items)):
                 item = items[i].strip()
@@ -41,3 +42,7 @@ class Brackets:
                     before_bracket = False
                 else:
                     before_bracket = True
+
+            # dont call it on first array nodes
+            if call_first_item and (items[0] in ['  (', '  [']):
+                items[0] = ' ' + items[0]

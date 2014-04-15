@@ -55,7 +55,7 @@ class Parser:
             last_node = data[0]
 
             for i in xrange(0, len(data) - 2, 2):
-                tmp = Mod.get(cls._type, last_node, data[i+1], data[i+2])
+                tmp = Mod.get(cls._type, last_node, data[i+1], data[i+2], i == 0)
                 # if _before is empty then append _text to last result node - always text node.
                 # if result is empty then leave as is and append to result
                 if not tmp[0] and result:
@@ -89,7 +89,7 @@ class Parser:
             to_before.insert(0, arr.pop())
 
         if arr:
-            # add to to_before element ' | .|..text' and ' |  .|..text'
+            # add to to_before element ' |<any count spaces>.|..text'
             if not arr[-1][-1] == ' ':
                 to_before.insert(0, arr.pop().strip())
 

@@ -1,6 +1,6 @@
 class Asterisk:
     @staticmethod
-    def blocks(before, string, after):
+    def blocks(before, string, after, first):
         if before:
             join = True
             for item in before:
