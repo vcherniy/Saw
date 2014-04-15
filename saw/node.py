@@ -5,10 +5,10 @@ class Node(list):
     # get attributes of String class
     _str_dir = dir('')
 
-    def __init__(self, *args, **kwrds):
+    def __init__(self, *args):
         self._before, self._after = [], []
         self._text, self._type = '', ''
-        super(Node, self).__init__(*args, **kwrds)
+        super(Node, self).__init__(*args)
 
     def type(self, _type):
         self._type = _type

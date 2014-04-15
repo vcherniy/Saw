@@ -26,7 +26,9 @@ print saw.blocks[12].words[:-2:2]
 
 if str(saw.blocks.words) == str(saw.words):
     print 'str(saw.blocks.words) == str(saw.words)'
-print '-------'
+print '------- pure ---'
+print saw.paragraphs[0]
+print saw.paragraphs[0].pure()
 
 print ' ---- each ---'
 """
@@ -34,7 +36,6 @@ kt = saw.sentences.each().words[:3].get()
 for s in kt:
     print '** ' + str(s)
 print ' ------- '
-
 # IF blocks() then ERROR!!!!
 # No works
 #ps = saw.sentences.each().blocks.each().words[:3].get(2)

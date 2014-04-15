@@ -1,12 +1,7 @@
 class Pure:
     @staticmethod
-    def item(item):
-        new_item = item.__class__()
-        new_item.__dict__ = item.__dict__.copy()
-        new_item.before([])
-        new_item.after([])
-        return new_item
-
-    @staticmethod
-    def items(items):
-        return items.__class__(x.pure() for x in items)
+    def filter(node):
+        new_node = node.__class__(x.pure() for x in node)
+        new_node.__dict__ = node.__dict__.copy()
+        new_node.before([]).after([])
+        return new_node

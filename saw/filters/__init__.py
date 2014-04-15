@@ -18,15 +18,14 @@ class Filter:
         return name in cls._filters
 
     @classmethod
-    def get(cls, filter_name, item):
+    def get(cls, filter_name, node):
         if not cls.exists(filter_name):
             raise Exception("Filter not found!")
         # get class name of input variable and call filter's method with its name.
-        func_name = item.__class__.__name__.lower()
         filter_class = cls._filters[filter_name]
-        if not hasattr(filter_class, func_name):
-            raise Exception("Filter '%s' has not method '%s'!" % (filter_name, func_name))
+        if not hasattr(filter_class, 'filter'):
+            raise Exception("Filter '%s' has not main method!" % filter_name)
 
         def callback(*args, **kw):
-            return getattr(filter_class(), func_name)(item, *args, **kw)
+            return filter_class().filter(node, *args, **kw)
         return callback
