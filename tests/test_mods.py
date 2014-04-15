@@ -9,7 +9,7 @@ class TestMods(unittest.TestCase):
 
     @staticmethod
     def _form(iem):
-        return [[item._before or [], item._text or '', item._after or []] for item in iem.children]
+        return [[item._before or [], item._text or '', item._after or []] for item in iem]
 
     def test_sentences(self):
         text = '?1 sentence! But what!!WTF   ? .That 12.45 points.   .   Length = 100m..'
@@ -23,7 +23,6 @@ class TestMods(unittest.TestCase):
         ]
         saw = Sentences.load(text)
         self.assertEqual(self._form(saw), expect)
-        return
 
         text = "Test! ! ft.?. start..end ..before and.  ?!.ending text"
         expect = [
@@ -38,7 +37,6 @@ class TestMods(unittest.TestCase):
 
     def test_blocks(self):
         # [',', ':', '=', '+', ';', '*', '"', '-', "'", '{', '(', '[', ']', ')', '}', ]
-        return
         # :x  x:y
         # +y  x+y
         # -x  x-y

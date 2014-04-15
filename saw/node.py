@@ -5,10 +5,10 @@ class Node(list):
     # get attributes of String class
     _str_dir = dir('')
 
-    def __init__(self, *args, **kwrd):
+    def __init__(self, *args, **kwrds):
         self._before, self._after = [], []
         self._text, self._type = '', ''
-        super(Node, self).__init__(*args, **kwrd)
+        super(Node, self).__init__(*args, **kwrds)
 
     def type(self, _type):
         self._type = _type
@@ -65,10 +65,12 @@ class Node(list):
         if Filter.exists(name):
             return Filter.get(name, self)
 
+        if name == self._type:
+            return self
+
         result = Node()
-        if not self:
-            for item in self:
-                result.extend(getattr(item, name))
+        for item in self:
+            result.extend(getattr(item, name))
         return result
 
     def __getitem__(self, key):
