@@ -13,10 +13,6 @@ class Words(Parser):
         return data
 
     @classmethod
-    def _process_string(cls, saw, text, to_before):
-        saw.append(Node('').text(text))
-
-    @classmethod
     def _load_children(cls, saw, data):
-        for i in range(0, len(data)):
-            cls._process_string(saw, data[i], [])
+        for x in data:
+            saw.append(Node().text(x))
