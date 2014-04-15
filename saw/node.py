@@ -7,13 +7,11 @@ class Node(list):
 
     def __init__(self, *args, **kwrd):
         self._before, self._after = [], []
-        self._text = ''
-        self._type = ''
+        self._text, self._type = '', ''
         super(Node, self).__init__(*args, **kwrd)
 
-    def type(self, _type, _pm = False):
+    def type(self, _type):
         self._type = _type
-        self._process_mods = _pm
         return self
 
     def before(self, value, _append=False):
@@ -76,9 +74,9 @@ class Node(list):
     def __getitem__(self, key):
         result = super(Node, self).__getitem__(key)
         if isinstance(key, slice):
-            result = Node(result)
+            result = Node(result).type(self._type)
         return result
 
     def __getslice__(self, i, j):
         result = super(Node, self).__getslice__(i, j)
-        return Node(result)
+        return Node(result).type(self._type)
