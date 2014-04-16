@@ -49,25 +49,20 @@ class Node(list):
     def __getattr__(self, name):
         name = str(name)
 
+        # filter
+        if Filter.exists(name):
+            return Filter.get(name, self)
+
+        # string's methods
         if name in self._str_dir:
             # get str hash of this object and apply attribute to this
             return getattr(str(self), name)
 
-        #if name in self._str_dir:
-        #    result = Items(getattr(item, name) for item in self)
-
-        #    if result and callable(result[0]):
-        #        def wrapper(*args, **kw):
-        #            return Items(func(*args, **kw) for func in result)
-        #        return wrapper
-        #    return result
-
-        if Filter.exists(name):
-            return Filter.get(name, self)
-
+        # alias
         if name == self._type:
             return self
 
+        # children
         result = Node()
         for item in self:
             result.extend(getattr(item, name))
@@ -82,3 +77,8 @@ class Node(list):
     def __getslice__(self, i, j):
         result = super(Node, self).__getslice__(i, j)
         return Node(result).type(self._type)
+
+    def copy(self, lmd=lambda x: x):
+        new_node = Node(lmd(x) for x in self)
+        new_node.__dict__ = self.__dict__.copy()
+        return new_node
