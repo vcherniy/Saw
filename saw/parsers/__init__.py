@@ -8,7 +8,7 @@ class Parser:
     _format = ''
     _child_class = None
 
-    process_mods = True
+    enable_process_mods = True
 
     @classmethod
     def parse(cls, text):
@@ -143,7 +143,7 @@ class Parser:
         saw = Node().type(cls._type)
 
         data = cls.parse(text)
-        if cls.process_mods:
+        if cls.enable_process_mods:
             data = cls.process_mods(data)
         cls._load_children(saw, data)
         return saw

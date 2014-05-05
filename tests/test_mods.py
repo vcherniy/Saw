@@ -2,9 +2,12 @@ import unittest
 from saw.parsers.sentences import Sentences
 from saw.parsers.blocks import Blocks
 
+from saw.parsers import Parser
+
 
 class TestMods(unittest.TestCase):
     def setUp(self):
+        Parser.enable_process_mods = True
         pass
 
     @staticmethod
