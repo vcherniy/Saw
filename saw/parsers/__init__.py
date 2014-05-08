@@ -89,16 +89,20 @@ class Parser:
 
         #  . , |.,|
         to_before = []
-        while arr and (len(arr[-1]) == 1):
-            to_before.insert(0, arr.pop())
+        to = len(arr) - 1
 
-        if arr:
+        while (to >= 0) and (len(arr[to]) == 1):
+            to_before.insert(0, arr[to])
+            to += -1
+
+        if to >= 0:
             # add to to_before element ' |<any count spaces>.|..text'
-            if not arr[-1][-1] == ' ':
-                to_before.insert(0, arr.pop().strip())
+            if not arr[to][-1] == ' ':
+                to_before.insert(0, arr[to].strip())
+                to += -1
 
             # still items just for _after -- 'x..y' and 'x ..y' items were excluded
-            if arr:
+            if to >= 0:
                 # first item should be attached to current last text item
                 if arr[0][0] == ' ':
                     arr[0] = arr[0][1:]
@@ -106,19 +110,19 @@ class Parser:
                 # because we should set _after for last item of Node
                 need_new = not saw
 
-                for item in arr:
-                    if item == ' ':
+                for i in xrange(0, to + 1):
+                    if arr[i] == ' ':
                         need_new = True
-                    to_before_mode = (item[:2] == '  ')
+                    to_before_mode = (arr[i][:2] == '  ')
                     if need_new:
                         cls._append(saw)
                         need_new = False
-                    if item[-1] == ' ':
+                    if arr[i][-1] == ' ':
                         need_new = True
                     if to_before_mode:
-                        saw[-1].before(item.strip(), True)
+                        saw[-1].before(arr[i].strip(), True)
                     else:
-                        saw[-1].after(item.strip(), True)
+                        saw[-1].after(arr[i].strip(), True)
         # there was 'x..y', because we must set ['.', '.'] as _after of last item of Node
         # if Node is empty then there was begin of string then leave _before for next Node's item
         elif saw:
