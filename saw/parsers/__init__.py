@@ -110,8 +110,7 @@ class Parser:
                 # because we should set _after for last item of Node
                 need_new = not saw
 
-                i = 0
-                while i <= to:
+                for i in xrange(0, to + 1):
                     if arr[i] == ' ':
                         need_new = True
                     to_before_mode = (arr[i][:2] == '  ')
@@ -124,7 +123,6 @@ class Parser:
                         saw[-1].before(arr[i].strip(), True)
                     else:
                         saw[-1].after(arr[i].strip(), True)
-                    i += 1
         # there was 'x..y', because we must set ['.', '.'] as _after of last item of Node
         # if Node is empty then there was begin of string then leave _before for next Node's item
         elif saw:
