@@ -16,7 +16,8 @@ class Brackets:
     @staticmethod
     def _process(items, call_first_item):
         if items:
-            for i in xrange(0, len(items)):
+            _len = len(items)
+            for i in xrange(0, _len):
                 item = items[i].strip()
                 if item in [']', ')']:
                     items[i] = item + ' '
@@ -25,7 +26,7 @@ class Brackets:
 
             # if x- ) then include ) to -
             before_bracket = items[0] in [') ', '] ']
-            for i in xrange(1, len(items)):
+            for i in xrange(1, _len):
                 if items[i] in [') ', '] ']:
                     if not before_bracket and (items[i - 1][-1] == ' '):
                         items[i - 1] = items[i - 1][:-1]
@@ -35,7 +36,7 @@ class Brackets:
 
             # if '( - ' then include ( to -
             before_bracket = items[0] in ['  (', '  [']
-            for i in xrange(1, len(items)):
+            for i in xrange(1, _len):
                 if not(items[i] in ['  (', '  [']):
                     if before_bracket and (items[i][0] == ' '):
                         items[i] = items[i][1:]
