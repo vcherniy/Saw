@@ -88,12 +88,10 @@ class Parser:
             return []
 
         #  . , |.,|
-        to_before = []
         to = len(arr) - 1
-
         while (to >= 0) and (len(arr[to]) == 1):
-            to_before.insert(0, arr[to])
-            to += -1
+            to -= 1
+        to_before = arr[to + 1:]
 
         if to >= 0:
             # add to to_before element ' |<any count spaces>.|..text'
