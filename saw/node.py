@@ -81,7 +81,3 @@ class Node(list):
         new_node = Node(lmd(x) for x in self)
         new_node.__dict__ = self.__dict__.copy()
         return new_node
-
-    def layer(self, layer_func):
-        for k in self:
-            layer_func(k)

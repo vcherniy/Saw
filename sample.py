@@ -65,11 +65,10 @@ print sw
 
 def add_triad(node):
 	text = node._text
-	node.type('triads')
 	for i in xrange(0, len(text) - 2):
 		triad = Node().text(text[i: i + 3])
 		node.append(triad)
 
-sw.words.layer(add_triad)
+sw.words.layer('triads', add_triad)
 for tr in sw.triads:
 	print tr
