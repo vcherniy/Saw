@@ -97,7 +97,7 @@ class Parser:
             # add to to_before element ' |<any count spaces>.|..text'
             if not arr[to][-1] == ' ':
                 to_before.insert(0, arr[to].strip())
-                to += -1
+                to -= 1
 
             # still items just for _after -- 'x..y' and 'x ..y' items were excluded
             if to >= 0:
@@ -109,7 +109,7 @@ class Parser:
                 need_new = not saw
 
                 for i in xrange(0, to + 1):
-                    if arr[i] == ' ':
+                    if arr[i][0] == ' ':
                         need_new = True
                     to_before_mode = (arr[i][:2] == '  ')
                     if need_new:
