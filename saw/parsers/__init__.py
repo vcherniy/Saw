@@ -52,9 +52,9 @@ class Parser:
         result = []
 
         if data:
-            last_node = data[0]
+            _before = data[0]
             for i in xrange(0, len(data) - 2, 2):
-                tmp = Mod.get(cls._type, last_node, data[i+1], data[i+2], i == 0)
+                tmp = Mod.get(cls._type, _before, data[i+1], data[i+2], i == 0)
                 # if _before is empty then append _text to last result node - always text node.
                 # if result is empty then leave as is and append to result
                 if not tmp[0] and result:
@@ -62,8 +62,9 @@ class Parser:
                 else:
                     result.append(tmp[0])
                     result.append(tmp[1])
-                last_node = tmp[2]
-            result.append(last_node)
+                # set _after to _before
+                _before = tmp[2]
+            result.append(_before)
         return result
 
     # =========== Load ==============

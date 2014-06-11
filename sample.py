@@ -57,3 +57,19 @@ result2 = saw.paragraphs.each().blocks[0].pure().lower().get()
 
 for x in result2:
 	print x.words, '-------'
+
+txt = 'Fuck you, Bitch. Maza facka!'
+sw = Saw.sentences.load(txt)
+sw.words.call(lambda x: x.text(x._text + '_'))
+print sw
+
+def add_triad(node):
+	text = node._text
+	node.type('triads')
+	for i in xrange(0, len(text) - 2):
+		triad = Node().text(text[i: i + 3])
+		node.append(triad)
+
+sw.words.layer(add_triad)
+for tr in sw.triads:
+	print tr
