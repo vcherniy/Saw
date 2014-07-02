@@ -12,7 +12,7 @@ class TestMods(unittest.TestCase):
 
     @staticmethod
     def _form(iem):
-        return [[item._before or [], item._text or '', item._after or []] for item in iem]
+        return [[item.before() or [], item.text() or '', item.after() or []] for item in iem]
 
     def test_sentences(self):
         text = '?1 sentence! But what!!WTF   ? .That 12.45 points.   .   Length = 100m..'

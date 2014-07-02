@@ -13,21 +13,27 @@ class Node(list):
         self._type = _type
         return self
 
-    def before(self, value, _append=False):
+    def before(self, value=None, _append=False):
+        if value is None:
+            return self._before
         if _append:
             self._before.append(value)
         else:
             self._before = value
         return self
 
-    def after(self, value, _append=False):
+    def after(self, value=None, _append=False):
+        if value is None:
+            return self._after
         if _append:
             self._after.append(value)
         else:
             self._after = value
         return self
 
-    def text(self, text, _append=False):
+    def text(self, text=None, _append=False):
+        if text is None:
+            return self._text
         if _append:
             self._text += text
         else:
