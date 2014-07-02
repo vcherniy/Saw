@@ -9,7 +9,9 @@ class Node(list):
         self._text, self._type = '', ''
         super(Node, self).__init__(*args)
 
-    def type(self, _type):
+    def type(self, _type=None):
+        if _type is None:
+            return self._type
         self._type = _type
         return self
 
@@ -82,6 +84,14 @@ class Node(list):
     def __getslice__(self, i, j):
         result = super(Node, self).__getslice__(i, j)
         return Node(result).type(self._type)
+
+    #def __eq__(self, other):
+    #    return super(Node, self).__eq__(other)\
+    #        and (isinstance(other, self.__class__))\
+    #        and (self.__dict__ == other.__dict__)
+
+    #def __ne__(self, other):
+    #    return not self.__eq__(other)
 
     def copy(self, lmd=lambda x: x):
         new_node = Node(lmd(x) for x in self)
