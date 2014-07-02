@@ -11,7 +11,6 @@ from saw.parsers import Parser
 class TestLoad(unittest.TestCase):
     def setUp(self):
         Parser.enable_process_mods = False
-        pass
 
     @staticmethod
     def _form(iem):

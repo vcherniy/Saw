@@ -8,7 +8,6 @@ from saw.parsers import Parser
 class TestMods(unittest.TestCase):
     def setUp(self):
         Parser.enable_process_mods = True
-        pass
 
     @staticmethod
     def _form(iem):
