@@ -47,5 +47,5 @@ class Mod:
             raise Exception("Mods not found!")
 
         for mod in cls._mods[name]:
-            _before, _text, _after = mod(_before, _text, _after, first)
-        return _before, _text, _after
+            [_before, _text, _after] = mod(_before, _text, _after, first)
+        return [_before, _text, _after]
