@@ -42,9 +42,11 @@ class Node(list):
             self._text = text
         return self
 
-    #def __repr__(self):
-    #    return dict((x, y) for x, y in self.__dict__.copy().iteritems()
-    #                if y and not (x == 'children')).__repr__()
+    def __repr__(self):
+        result = dict((x, y) for x, y in self.__dict__.iteritems() if y)
+        if len(self):
+            result['_'] = list(self)
+        return result.__repr__()
 
     def __str__(self):
         children_text = ' '.join((str(x) for x in self))
@@ -85,15 +87,15 @@ class Node(list):
         result = super(Node, self).__getslice__(i, j)
         return Node(result).type(self._type)
 
-    #def __eq__(self, other):
-    #    return super(Node, self).__eq__(other)\
-    #        and (isinstance(other, self.__class__))\
-    #        and (self.__dict__ == other.__dict__)
+    def __eq__(self, other):
+        return super(Node, self).__eq__(other)\
+            and (isinstance(other, self.__class__))\
+            and (self.__dict__ == other.__dict__)
 
-    #def __ne__(self, other):
-    #    return not self.__eq__(other)
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def copy(self, lmd=lambda x: x):
-        new_node = Node(lmd(x) for x in self)
+        new_node = Node(lmd(x.copy()) for x in self)
         new_node.__dict__ = self.__dict__.copy()
         return new_node

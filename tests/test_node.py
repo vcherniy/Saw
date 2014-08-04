@@ -1,6 +1,7 @@
 import unittest
 from saw.parsers.words import Node, Words
 from saw.parsers.blocks import Blocks
+from saw.saw import Saw
 
 
 class TestLoad(unittest.TestCase):
@@ -56,7 +57,9 @@ class TestLoad(unittest.TestCase):
         pass
 
     def test___str(self):
-        pass
+        text = 'Any text, :yep:. Test it- test it fast?!'
+        node = Saw.load(text)
+        self.assertEqual(str(node), text)
 
     def test___getattr(self):
         pass
@@ -94,7 +97,7 @@ class TestLoad(unittest.TestCase):
         sl_1 = node[:3][2]
         self.assertEqual(sl_1.__class__, Node)
         self.assertEqual(sl_1.type(), Words._type)
-        self.assertEqual(sl_1, Words.load('text,'))
+        self.assertEqual(sl_1, Words.load('third'))
 
         sl_1 = node[0][:2]
         self.assertEqual(sl_1.__class__, Node)
@@ -120,8 +123,12 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(blocks, node)
 
     def test_copy(self):
-        #node = Paragraphs.load('Any text, second, third')
-        pass
+        txt = 'Any text, yep. Test it!'
+        sw = Blocks.load(txt)
+        for a in sw.copy().words:
+            a.text('_', True)
+
+        self.assertEqual(str(sw), 'Any text, yep. Test it!')
 
 
 if __name__ == "__main__":
