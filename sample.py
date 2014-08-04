@@ -60,15 +60,18 @@ for x in result2:
 
 txt = 'Fuck you, Bitch. Maza facka!'
 sw = Saw.sentences.load(txt)
-sw.words.call(lambda x: x.text(x._text + '_'))
-print sw
+print sw.words.copy(lambda x: x.text(x._text + '_'))
 
-def add_triad(node):
-	text = node._text
+def add_triad(layer):
+	text = layer.get_node().text()
 	for i in xrange(0, len(text) - 2):
 		triad = Node().text(text[i: i + 3])
-		node.append(triad)
+		layer.append(triad)
 
 sw.words.layer('triads', add_triad)
 for tr in sw.triads:
+	print tr
+
+print '---- filter ----'
+for tr in sw.triads.filter(lambda x: 'f' in x.text().lower()):
 	print tr
