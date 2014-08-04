@@ -121,6 +121,7 @@ class TestMods(unittest.TestCase):
             saw = Blocks.load(text)
             #self.assertEqual(self._form(saw), expect)
 
+    def test_blocks_asteriks(self):
         # x*y
         text = 'Text*new bb**cc *new test* ***st -*bb *pt-*nn aaa**'
         expect = [
@@ -130,6 +131,13 @@ class TestMods(unittest.TestCase):
             [['-', '*'],      '', []],          # -*bb
             [['*'],           '', ['-', '*']],  # *pt-*
             [[],              '', ['*', '*']]   # nn aaa**
+        ]
+        saw = Blocks.load(text)
+        self.assertEqual(self._form(saw), expect)
+
+        text = '*begin string'
+        expect = [
+            [['*'], '', []],       # *begin string
         ]
         saw = Blocks.load(text)
         self.assertEqual(self._form(saw), expect)

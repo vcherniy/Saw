@@ -1,7 +1,7 @@
 class Asterisk:
     @staticmethod
     def blocks(before, string, after, first):
-        if before:
+        if before and not first:
             join = True
             for item in before:
                 if item != '*':
