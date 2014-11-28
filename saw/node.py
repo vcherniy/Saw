@@ -72,7 +72,7 @@ class Node(list):
             return self
 
         # children
-        result = Node()
+        result = Node().type(name)
         for item in self:
             result.extend(getattr(item, name))
         return result

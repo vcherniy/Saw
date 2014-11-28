@@ -3,6 +3,7 @@ from saw.parsers.sentences import Sentences
 from saw.parsers.blocks import Blocks
 
 from saw.parsers import Parser
+from saw.parsers import Mod
 
 
 class TestMods(unittest.TestCase):
@@ -141,6 +142,13 @@ class TestMods(unittest.TestCase):
         ]
         saw = Blocks.load(text)
         self.assertEqual(self._form(saw), expect)
+
+    def test_no_type(self):
+        try:
+            Mod.get('no_type_exists', [], 'any text', [], False)
+            assert False
+        except Exception, e:
+            assert str(e) == "Mods not found!"
 
 
 if __name__ == "__main__":

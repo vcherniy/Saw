@@ -10,12 +10,12 @@ class TestLoad(unittest.TestCase):
 
     def test_type(self):
         node = Words.load('aa')
-        self.assertEquals(node.type(), 'words')
+        self.assertEqual(node.type(), 'words')
 
         node.type('test')
-        self.assertEquals(node.type(), 'test')
+        self.assertEqual(node.type(), 'test')
 
-        self.assertEquals(node.type('none'), node)
+        self.assertEqual(node.type('none'), node)
 
     def test_before(self):
         node = Node()
@@ -26,8 +26,8 @@ class TestLoad(unittest.TestCase):
         node.before('-', True).before('!', True)
         self.assertEqual(node.before(), [',', ':', '.', '-', '!'])
 
-        self.assertEquals(node.before(['.', '-']), node)
-        self.assertEquals(node.before(['.', '-'], True), node)
+        self.assertEqual(node.before(['.', '-']), node)
+        self.assertEqual(node.before(['.', '-'], True), node)
 
     def test_after(self):
         node = Node()
@@ -38,8 +38,8 @@ class TestLoad(unittest.TestCase):
         node.after('-', True).after('!', True)
         self.assertEqual(node.after(), [',', ':', '.', '-', '!'])
 
-        self.assertEquals(node.after(['.', '-']), node)
-        self.assertEquals(node.after(['.', '-'], True), node)
+        self.assertEqual(node.after(['.', '-']), node)
+        self.assertEqual(node.after(['.', '-'], True), node)
 
     def test_text(self):
         node = Node()
@@ -50,8 +50,8 @@ class TestLoad(unittest.TestCase):
         node.text(', second', True).text(', third', True)
         self.assertEqual(node.text(), 'Any text, second, third')
 
-        self.assertEquals(node.text('test'), node)
-        self.assertEquals(node.text('test', True), node)
+        self.assertEqual(node.text('test'), node)
+        self.assertEqual(node.text('test', True), node)
 
     def test___repr(self):
         pass
@@ -62,7 +62,35 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(str(node), text)
 
     def test___getattr(self):
-        pass
+        # call List method
+        node1 = Words.load('first text')
+        node2 = Words.load('second text')
+        node3 = Words.load('first text second text')
+        node1.extend(node2)
+        self.assertEqual(node1, node3)
+
+        # call Node method
+        self.assertEqual(node1.type(), 'words')
+
+        # call method from List, that exists in String
+        node = Saw.load('I like dogs, dogs very nice. I told that dogs anytime!')
+        # Node should support all methods
+        #self.assertEqual(node.words.count('dogs'), 3)
+
+        # call String methods
+        node = Blocks.load('Any long, and terrible text; Just for test.')
+        self.assertEqual(node.islower(), False)
+        self.assertEqual(str(node.replace('r', '_')), 'Any long, and te__ible text; Just fo_ test.')
+
+        # call filter
+        self.assertEqual(str(node.pure()), 'Any long and terrible text Just for test.')
+
+        # call self type method
+        self.assertEqual(node.blocks, node)
+
+        # call children
+        words_node = Words.load('Any long and terrible text Just for test.')
+        self.assertEqual(node.words, words_node)
 
     def test___getitem(self):
         node = Blocks.load('Any text, second, third')
