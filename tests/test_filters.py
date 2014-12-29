@@ -51,8 +51,13 @@ class TestFilters(unittest.TestCase):
             assert str(e) == "Filter not found!"
 
     def test_not_exists_method_filter(self):
+        node = Saw.load('Any')
+        # check correct init and executing incorrect named method
+        from saw.filters.bad_filter_for_test import Bad_Filter_For_Test
+        _filter = Bad_Filter_For_Test()
+        _filter.filter__(node, lambda x: x)
+
         try:
-            node = Saw.load('Any')
             Filter.get('bad_filter_for_test', node)
             assert False
         except Exception, e:
