@@ -40,7 +40,7 @@ class TestFilters(unittest.TestCase):
         node = Saw.words.load('Any fucking words may be there')
         result = node.filter(lambda x: len(x.text()) > 3)
         self.assertEqual(str(result), 'fucking words there')
-        self.assertEqual(result, Saw.words.load('fucking words there').type(''))
+        self.assertEqual(result, Saw.words.load('fucking words there'))
 
     def test_filter_not_exists(self):
         try:

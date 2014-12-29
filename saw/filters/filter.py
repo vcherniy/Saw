@@ -10,4 +10,4 @@ class Filter:
         for item in node:
             if func(item):
                 result.append(item)
-        return result
+        return result.type(node.type())
