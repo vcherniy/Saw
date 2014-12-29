@@ -54,6 +54,33 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(node.text('test', True), node)
 
     def test___repr(self):
+        node = Blocks.load('Test it, after that!')
+        expect = {
+            '_type': 'blocks', 
+            '_': [{
+                    '_type': 'words', 
+                    '_after': [','], 
+                    '_': [
+                        {'_text': 'Test'}, 
+                        {'_text': 'it'}
+                    ]
+                }, {
+                    '_type': 'words', 
+                    '_': [ 
+                        {'_text': 'after'}, 
+                        {'_text': 'that!'}
+                    ]
+                }
+            ]
+        }
+        self.assertEqual(repr(node), repr(expect))
+
+    def test__noexists_method(self):
+        # @TODO
+        pass
+
+    def test__init_from_different_source(self):
+        # @TODO
         pass
 
     def test___str(self):
@@ -62,30 +89,28 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(str(node), text)
 
     def test___getattr(self):
-        # call List method
+        # call List (main) method
         node1 = Words.load('first text')
         node2 = Words.load('second text')
         node3 = Words.load('first text second text')
         node1.extend(node2)
         self.assertEqual(node1, node3)
 
-        # call Node method
-        self.assertEqual(node1.type(), 'words')
-
         # call method from List, that exists in String
         node = Saw.load('I like dogs, dogs very nice. I told that dogs anytime!')
-        # Node should support all methods
-        #self.assertEqual(node.words.count('dogs'), 3)
-
-        # call String methods
+        ###self.assertEqual(node3.words.count('text'), 2)
+        
         node = Blocks.load('Any long, and terrible text; Just for test.')
-        self.assertEqual(node.islower(), False)
-        self.assertEqual(str(node.replace('r', '_')), 'Any long, and te__ible text; Just fo_ test.')
 
         # call filter
         self.assertEqual(str(node.pure()), 'Any long and terrible text Just for test.')
 
-        # call self type method
+        # call String methods
+        self.assertEqual(node.islower(), False)
+        self.assertEqual(node.replace('r', '_'), 'Any long, and te__ible text; Just fo_ test.')
+        self.assertEqual(node.split(' '), ['Any', 'long,', 'and', 'terrible', 'text;', 'Just', 'for', 'test.'])
+
+        # call alias
         self.assertEqual(node.blocks, node)
 
         # call children
@@ -118,6 +143,10 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(sl_3.__class__, Node)
         self.assertEqual(sl_3.type(), node.type())
         self.assertEqual(sl_3, Words.load('text, second, third'))
+
+        # old syntax by __getitem__
+        sl_4 = node.__getitem__(slice(1,3))
+        self.assertEqual(sl_4, sl_2)
 
     def test_get_item_and_slice(self):
         node = Blocks.load('Any advanced text, second, third')
@@ -156,7 +185,7 @@ class TestLoad(unittest.TestCase):
         for a in sw.copy().words:
             a.text('_', True)
 
-        self.assertEqual(str(sw), 'Any text, yep. Test it!')
+        self.assertEqual(str(sw), txt)
 
 
 if __name__ == "__main__":

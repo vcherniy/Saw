@@ -73,6 +73,14 @@ class TestSaw(unittest.TestCase):
         expect = ['Test', 'with', 'many', '.', 'spaces.', 'and:', '-,end']
         self.assertEqual(Words.parse(text), expect)
 
+        # test _append method if child class is none
+        # to 100% test coverage
+        saw = Words.load('Test it')
+        item = Words._append(saw, 'Re')
+        # @TODO
+        #saw.assertEqual(item.text(), 'Re')
+        #saw.assertEqual(item.type(), '')
+
 
 if __name__ == "__main__":
     unittest.main()

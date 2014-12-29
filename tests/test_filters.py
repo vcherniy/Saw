@@ -9,6 +9,7 @@ class TestFilters(unittest.TestCase):
         pass
 
     def test_index(self):
+        # create instance for each use
         text = 'xaa, dfs-* na. pa?'
         node = Saw.load(text)
         _ = node.pure()
@@ -34,6 +35,12 @@ class TestFilters(unittest.TestCase):
     def test_lower(self):
         node = Saw.load('Any TEXT, 12Month aNu -- o')
         self.assertEqual(str(node.lower()), 'any text, 12month anu-- o')
+
+    def test_filter(self):
+        node = Saw.words.load('Any fucking words may be there')
+        result = node.filter(lambda x: len(x.text()) > 3)
+        self.assertEqual(str(result), 'fucking words there')
+        self.assertEqual(result, Saw.words.load('fucking words there').type(''))
 
     def test_filter_not_exists(self):
         try:
