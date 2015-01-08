@@ -24,7 +24,3 @@ class Each:
                     return self
                 return wrapper
         return self
-
-    def save_to(self, var, to_node=False):
-        var = self.get(to_node)
-        return self

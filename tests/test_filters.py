@@ -63,5 +63,13 @@ class TestFilters(unittest.TestCase):
         except Exception, e:
             assert str(e) == "Filter '%s' has not main method!" % 'bad_filter_for_test'
 
+    def test_each(self):
+    	node = Saw.load('Test it, for each')
+
+    	self.assertEqual(node.each().get(), node)
+    	self.assertEqual(node.blocks.each()[0].get().words, Saw.load('test for').words)
+    	self.assertEqual(node.words.each()[:2].upper().get(true), Saw.words.load('TE IT FO EA'))
+
+
 if __name__ == "__main__":
     unittest.main()
