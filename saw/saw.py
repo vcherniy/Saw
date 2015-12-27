@@ -1,6 +1,7 @@
 from parsers.paragraphs import Paragraphs, Sentences
 from parsers.blocks import Blocks, Words
 
+
 class Saw:
     paragraphs = Paragraphs
     sentences = Sentences

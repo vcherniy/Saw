@@ -1,5 +1,6 @@
 from saw.node import Node
 
+
 class Filter:
     def __init__(self):
         pass

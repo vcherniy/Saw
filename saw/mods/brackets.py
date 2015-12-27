@@ -44,6 +44,6 @@ class Brackets:
                 else:
                     before_bracket = True
 
-            # dont call it on first array nodes
+            # don't call it on first array nodes
             if call_first_item and (items[0] in ['  (', '  [']):
                 items[0] = ' ' + items[0]
