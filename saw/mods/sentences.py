@@ -4,7 +4,10 @@ class Sentences:
         while before and (before[-1] == '.'):
             string = before.pop().strip() + string
         if before and (before[-1] == ' .'):
-            string = before.pop().strip() + string
+            new_before = before.pop()
+            if len(before) > 0:
+                new_before = new_before.strip()
+            string = new_before + string
         return [before, string, after]
 
     @staticmethod

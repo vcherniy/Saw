@@ -25,7 +25,7 @@ class TestFilters(unittest.TestCase):
 
         # with enabled mods
         node = Saw.load(':test .its any*text -fuck')
-        self.assertEqual(str(node.pure()), ':test.its any*text-fuck')
+        self.assertEqual(str(node.pure()), ':test .its any*text-fuck')
         # without enabled mods
         Parser.enable_process_mods = False
         node = Saw.load(':test .its any*text -fuck')
