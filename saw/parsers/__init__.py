@@ -1,14 +1,25 @@
 from saw.node import Node
-import re
 from saw.mods import Mod
+import re
 
 
 class Parser:
-    _type = ''
-    _format = ''
     _child_class = None
-
+    _delimiters = []
+    _format = ''
     enable_process_mods = True
+
+    @classmethod
+    def type(cls):
+        return cls.__name__.lower()
+
+    @classmethod
+    def format(cls, _format=None):
+        if _format is not None:
+            cls._format = _format
+        if not cls._format:
+            cls._format = '[\\' + '\\'.join(cls._delimiters) + ']+'
+        return cls._format
 
     @classmethod
     def parse(cls, text):
@@ -17,7 +28,7 @@ class Parser:
         prev = 0
         old_items = []
 
-        for m in re.finditer(cls._format, text):
+        for m in re.finditer(cls.format(), text):
             curr, _next = m.start(), m.end()
             # append string and nodes what were before it
             if prev < curr:
@@ -54,7 +65,7 @@ class Parser:
         if data:
             _before = data[0]
             for i in xrange(0, len(data) - 2, 2):
-                tmp = Mod.get(cls._type, _before, data[i+1], data[i+2], i == 0)
+                tmp = Mod.get(cls.type(), _before, data[i+1], data[i+2], i == 0)
                 # if _before is empty then append _text to last result node - always text node.
                 # if result is empty then leave as is and append to result
                 if not tmp[0] and result:
@@ -79,7 +90,7 @@ class Parser:
         else:
             node = Node()
             if cls._child_class:
-                node.type(cls._child_class._type)
+                node.type(cls._child_class.type())
         saw.append(node)
         return saw[-1]
 
@@ -143,7 +154,7 @@ class Parser:
 
     @classmethod
     def load(cls, text):
-        saw = Node().type(cls._type)
+        saw = Node().type(cls.type())
 
         data = cls.parse(text)
         if cls.enable_process_mods:

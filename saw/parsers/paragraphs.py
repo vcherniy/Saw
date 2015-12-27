@@ -2,7 +2,6 @@ from saw.parsers.sentences import Parser, Sentences
 
 
 class Paragraphs(Parser):
-    _type = 'paragraphs'
     _child_class = Sentences
 
     @classmethod
@@ -10,9 +9,10 @@ class Paragraphs(Parser):
         items = text.split("\n")
         result, tmp = [], []
         for item in items:
-            if item != '':
+            _item = item.strip()
+            if _item != '':
                 result.append(tmp)
-                result.append(item.strip())
+                result.append(_item)
                 tmp = []
             tmp.append("\n")
         # end of string will add \n. We should ignore it.

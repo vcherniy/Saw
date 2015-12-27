@@ -123,8 +123,8 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(node[0].__class__, Node)
         self.assertEqual(node[2].__class__, Node)
 
-        self.assertEqual(node[0].type(), Words._type)
-        self.assertEqual(node[2].type(), Words._type)
+        self.assertEqual(node[0].type(), Words.type())
+        self.assertEqual(node[2].type(), Words.type())
 
     def test___getslice(self):
         node = Words.load('Any text, second, third')
@@ -153,17 +153,17 @@ class TestLoad(unittest.TestCase):
 
         sl_1 = node[:3][2]
         self.assertEqual(sl_1.__class__, Node)
-        self.assertEqual(sl_1.type(), Words._type)
+        self.assertEqual(sl_1.type(), Words.type())
         self.assertEqual(sl_1, Words.load('third'))
 
         sl_1 = node[0][:2]
         self.assertEqual(sl_1.__class__, Node)
-        self.assertEqual(sl_1.type(), Words._type)
+        self.assertEqual(sl_1.type(), Words.type())
         self.assertEqual(sl_1, Words.load('Any advanced'))
 
     def test___eq(self):
         node = Blocks.load('*Any advanced text,')
-        blocks = Node().type(Blocks._type)
+        blocks = Node().type(Blocks.type())
         blocks.append(Node())
 
         block = blocks[0]
@@ -172,7 +172,7 @@ class TestLoad(unittest.TestCase):
         self.assertNotEqual(blocks, node)
         block.after([','])
         self.assertNotEqual(blocks, node)
-        block.type(Words._type)
+        block.type(Words.type())
         self.assertNotEqual(blocks, node)
 
         for word in Words.load('Any advanced text'):
