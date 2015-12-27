@@ -37,3 +37,4 @@ nosetests.xml
 
 # IDE files
 saw/.idea/*
+.idea/*
