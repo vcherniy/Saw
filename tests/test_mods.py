@@ -1,9 +1,6 @@
 import unittest
-from saw.parsers.sentences import Sentences
-from saw.parsers.blocks import Blocks
-
-from saw.parsers import Parser
-from saw.parsers import Mod
+from saw.saw import Saw
+from saw.parsers import Mod, Parser
 
 
 class TestMods(unittest.TestCase):
@@ -15,28 +12,18 @@ class TestMods(unittest.TestCase):
         return [[item.before() or [], item.text() or '', item.after() or []] for item in iem]
 
     def test_sentences(self):
-        text = '?1 sentence! But what!!WTF   ? .That 12.45 points.   .   Length = 100m..'
-        expect = [
-            [['?'], '', ['!']],        # ?1 sentence!
-            [[],    '', ['!', '!']],   # But what!!
-            [[],    '', ['?']],        # WTF   ?
-            [[],    '', ['.']],        # .That 12.45 points.
-            [[],    '', ['.']],        # .
-            [[],    '', ['.', '.']]    # Length = 100m..
-        ]
-        saw = Sentences.load(text)
-        self.assertEqual(self._form(saw), expect)
+        """
+        Explode by: ? ! .
+        """
+        text = '?Around! Double after?!Spaces    ? .That 12.45 float.   .   Long space before and double dot..'
+        expect = [['?'], 'Around', ['! '], 'Double after', ['?', '!'], 'Spaces', [' ? '],
+                         '.That 12.45 float', ['. ', ' . '], 'Long space before and double dot', ['.', '.']]
+        self.assertEqual(Saw.sentences.process_mods(Saw.sentences.parse(text)), expect)
 
-        text = "Test! ! ft.?. start..end ..before and.  ?!.ending text"
-        expect = [
-            [[],         '', ['!']],            # Test!
-            [[],         '', ['!']],            # !
-            [[],         '', ['.', '?', '.']],  # ft.?.
-            [[],         '', ['.']],            # start..end ..before and.
-            [['?', '!'], '', []]                # ?!.ending text
-        ]
-        saw = Sentences.load(text)
-        self.assertEqual(self._form(saw), expect)
+        text = "Double over space! ! Three different.?. double..between ..double before, and one after.  end string"
+        expect = [[], 'Double over space', ['! ', ' ! '], 'Three different', ['.', '?', '. '],
+                      'double..between ..double before, and one after', ['. '], 'end string', []]
+        self.assertEqual(Saw.sentences.process_mods(Saw.sentences.parse(text)), expect)
 
     def test_blocks(self):
         # [',', ':', '=', '+', ';', '*', '"', '-', "'", '{', '(', '[', ']', ')', '}', ]
@@ -49,7 +36,7 @@ class TestMods(unittest.TestCase):
                 [[], '', [rule]],  # Too long{0}
                 [[], '', []],      # {0}newer dash.{0}new new{0}text
             ]
-            saw = Blocks.load(text)
+            saw = Saw.blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = 'Too long{0}{0} {0}{0}newer new{0}{0}text '.format(rule)
@@ -58,7 +45,7 @@ class TestMods(unittest.TestCase):
                 [[rule, rule], '', [rule, rule]],  # {0}{0}newer new{0}{0}
                 [[],           '', []],            # text
             ]
-            saw = Blocks.load(text)
+            saw = Saw.blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = 'Too long *{0} new{0}*text *{0}newer {0}*casual +-combo -'.format(rule)
@@ -71,7 +58,7 @@ class TestMods(unittest.TestCase):
                 [['+', '-'],  '', []],           # +-combo
                 [[],          '', ['-']]         # -
             ]
-            saw = Blocks.load(text)
+            saw = Saw.blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
         # ( x -> before
@@ -88,7 +75,7 @@ class TestMods(unittest.TestCase):
                 [[st], '', [fn]],  # {0} aaa {1}
                 [[],   '', [fn]],  # {1}
             ]
-            saw = Blocks.load(text)
+            saw = Saw.blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = 'aa*{0}bbb ccc{1}ddd {1}{0}aaa cc *{1}{0} htc{1}'.format(st, fn)
@@ -99,7 +86,7 @@ class TestMods(unittest.TestCase):
                 [[st], '', ['*', fn]],  # {0}aaa cc *{1}
                 [[st], '', [fn]],       # {0} htc{1}
             ]
-            saw = Blocks.load(text)
+            saw = Saw.blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = '{0} aa{0} fdf - {1}fdf{1}  {0} * kt'.format(st, fn)
@@ -110,7 +97,7 @@ class TestMods(unittest.TestCase):
                 [[st], '', ['*']],      # {0}*
                 [[],   '', []],         # kt
             ]
-            saw = Blocks.load(text)
+            saw = Saw.blocks.load(text)
             self.assertEqual(self._form(saw), expect)
 
             text = '{1}aabc{0}'.format(st, fn)
@@ -119,7 +106,7 @@ class TestMods(unittest.TestCase):
                 [[],   '', []],    # aabc
                 [[st], '', []],    # {0}
             ]
-            saw = Blocks.load(text)
+            saw = Saw.blocks.load(text)
             #self.assertEqual(self._form(saw), expect)
 
     def test_blocks_asteriks(self):
@@ -133,14 +120,14 @@ class TestMods(unittest.TestCase):
             [['*'],           '', ['-', '*']],  # *pt-*
             [[],              '', ['*', '*']]   # nn aaa**
         ]
-        saw = Blocks.load(text)
+        saw = Saw.blocks.load(text)
         self.assertEqual(self._form(saw), expect)
 
         text = '*begin string'
         expect = [
             [['*'], '', []],       # *begin string
         ]
-        saw = Blocks.load(text)
+        saw = Saw.blocks.load(text)
         self.assertEqual(self._form(saw), expect)
 
     def test_no_type(self):
