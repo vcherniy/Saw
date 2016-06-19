@@ -1,8 +1,3 @@
-before_script:
-  - apt-get -y install python-pip
-  - pip install nosetests
-  - pip install coveralls
-
 rspec:
   script:
     - nosetests --with-coverage --cover-package=saw
