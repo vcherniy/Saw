@@ -6,5 +6,4 @@ rspec:
     - nosetests --with-coverage --cover-package=saw
 
 after_script:
-  script:
-    - coveralls
+  - coveralls
