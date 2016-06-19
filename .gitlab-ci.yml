@@ -1,0 +1,10 @@
+before_script:
+  - pip install coveralls
+
+rspec:
+  script:
+    - nosetests --with-coverage --cover-package=saw
+
+before_script:
+  script:
+    - coveralls
