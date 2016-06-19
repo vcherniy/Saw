@@ -1,4 +1,6 @@
 before_script:
+  - apt-get -y install python-pip
+  - pip install nosetests
   - pip install coveralls
 
 rspec:
